@@ -7,6 +7,7 @@ import {
 import { NativeScriptCommonModule } from '@nativescript/angular';
 import { Dialogs, isIOS } from '@nativescript/core';
 import { CheckInService } from '../../core/services/checkin.service';
+import { ReminderService } from '../../core/services/reminder.service';
 import { PrayerType, prayerTypeLabel } from '../../core/models/checkin.model';
 
 @Component({
@@ -18,13 +19,50 @@ import { PrayerType, prayerTypeLabel } from '../../core/models/checkin.model';
 })
 export class SettingsComponent {
   checkinService = inject(CheckInService);
+  reminderService = inject(ReminderService);
   prayerTypeLabel = prayerTypeLabel;
 
   isIOS = isIOS;
 
-  // Material Icons glyphs (Android)
-  cancelIcon = String.fromCharCode(0xe5c9);  // cancel (filled circle with x)
-  addIcon = String.fromCharCode(0xe145);     // add
+  cancelIcon = String.fromCharCode(0xe5c9);
+  addIcon = String.fromCharCode(0xe145);
+
+  private updatingReminder = false;
+  private timeChangeTimeout: ReturnType<typeof setTimeout> | undefined;
+
+  async onReminderToggle(args: any): Promise<void> {
+    if (this.updatingReminder) return;
+    this.updatingReminder = true;
+
+    try {
+      const wantEnabled = args.value;
+      const success = await this.reminderService.toggle(wantEnabled);
+
+      if (!success && wantEnabled) {
+        await Dialogs.alert({
+          title: 'Permission Required',
+          message:
+            'To receive daily reminders, please enable notifications for Prayer Streaks in your device settings.',
+          okButtonText: 'OK',
+        });
+      }
+    } finally {
+      this.updatingReminder = false;
+    }
+  }
+
+  onTimePickerLoaded(args: any): void {
+    const tp = args.object;
+    tp.hour = this.reminderService.hour();
+    tp.minute = this.reminderService.minute();
+
+    tp.on('timeChange', () => {
+      clearTimeout(this.timeChangeTimeout);
+      this.timeChangeTimeout = setTimeout(() => {
+        this.reminderService.updateTime(tp.hour, tp.minute);
+      }, 500);
+    });
+  }
 
   async addCustomType(): Promise<void> {
     const result = await Dialogs.prompt({
@@ -45,12 +83,15 @@ export class SettingsComponent {
     const confirmed = await Dialogs.confirm({
       title: 'Reset All Data',
       message:
-        'This will permanently delete all your check-ins and streaks. Are you sure?',
+        'This will permanently delete all your check-ins, streaks, and reminder settings. Are you sure?',
       okButtonText: 'Reset',
       cancelButtonText: 'Cancel',
     });
 
     if (confirmed) {
+      if (this.reminderService.enabled()) {
+        await this.reminderService.toggle(false);
+      }
       this.checkinService.resetAll();
     }
   }
