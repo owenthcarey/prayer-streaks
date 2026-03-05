@@ -9,6 +9,7 @@ import {
 import { NativeScriptCommonModule } from '@nativescript/angular';
 import { isIOS } from '@nativescript/core';
 import { CheckInService } from '../../core/services/checkin.service';
+import { ReminderService } from '../../core/services/reminder.service';
 import { ShareService } from '../../core/services/share.service';
 import { PrayerType, prayerTypeLabel } from '../../core/models/checkin.model';
 
@@ -21,6 +22,7 @@ import { PrayerType, prayerTypeLabel } from '../../core/models/checkin.model';
 })
 export class TodayComponent {
   checkinService = inject(CheckInService);
+  private reminderService = inject(ReminderService);
   private shareService = inject(ShareService);
   selectedType = signal<PrayerType | undefined>(undefined);
 
@@ -46,6 +48,7 @@ export class TodayComponent {
 
   onCheckIn(): void {
     this.checkinService.checkIn(this.selectedType());
+    this.reminderService.rescheduleIfEnabled();
   }
 
   onShare(): void {

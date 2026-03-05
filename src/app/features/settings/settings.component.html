@@ -66,6 +66,48 @@
       </GridLayout>
     </StackLayout>
 
+    <!-- Reminders Section -->
+    <Label
+      text="Reminders"
+      class="text-2xl font-bold mb-4 dark:text-white"
+    ></Label>
+    <StackLayout class="rounded-2xl bg-white dark:bg-[#1c1c1e] px-4 py-3 mb-6">
+      <GridLayout columns="*, auto" class="py-2 px-1">
+        <Label
+          col="0"
+          text="Daily Reminder"
+          class="text-base text-gray-800 dark:text-gray-200"
+          verticalAlignment="center"
+        ></Label>
+        <Switch
+          col="1"
+          [checked]="reminderService.enabled()"
+          (checkedChange)="onReminderToggle($event)"
+        ></Switch>
+      </GridLayout>
+      @if (reminderService.enabled()) {
+        <StackLayout class="border-t border-gray-100 dark:border-gray-700 pt-3 pb-1">
+          <GridLayout columns="*, auto" class="px-1 mb-2">
+            <Label
+              col="0"
+              text="Reminder Time"
+              class="text-sm text-gray-500 dark:text-gray-400"
+              verticalAlignment="center"
+            ></Label>
+            <Label
+              col="1"
+              [text]="reminderService.displayTime()"
+              class="text-sm text-blue-600 dark:text-blue-400 font-semibold"
+              verticalAlignment="center"
+            ></Label>
+          </GridLayout>
+          <TimePicker
+            (loaded)="onTimePickerLoaded($event)"
+          ></TimePicker>
+        </StackLayout>
+      }
+    </StackLayout>
+
     <!-- App Info Section -->
     <Label
       text="App Info"

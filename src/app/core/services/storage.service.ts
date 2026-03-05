@@ -25,6 +25,14 @@ export class StorageService {
     ApplicationSettings.setString(key, value);
   }
 
+  getBoolean(key: string, defaultValue: boolean): boolean {
+    return ApplicationSettings.getBoolean(key, defaultValue);
+  }
+
+  setBoolean(key: string, value: boolean): void {
+    ApplicationSettings.setBoolean(key, value);
+  }
+
   clear(): void {
     ApplicationSettings.clear();
   }
