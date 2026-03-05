@@ -19,7 +19,7 @@ polish**, all while remaining fully offline with no backend.
 These features directly address the two biggest risks for a habit-tracking app:
 users forgetting to open it, and users quietly churning after a broken streak.
 
-### 1.1 Local Push Notification Reminders
+### 1.1 Local Push Notification Reminders - [x]
 
 **Why:** The single most effective retention lever. Users who set a daily
 reminder are 3-4x more likely to maintain a streak. Without reminders, the app
@@ -45,7 +45,7 @@ ApplicationSettings.
 
 ---
 
-### 1.2 Streak Shield (Freeze / Grace Day)
+### 1.2 Streak Shield (Freeze / Grace Day) - [x]
 
 **Why:** Broken streaks are the #1 reason habit apps lose users permanently. A
 grace mechanism turns a frustration moment into a relief moment, keeping the
@@ -70,7 +70,7 @@ separately.
 
 ---
 
-### 1.3 Milestones & Achievements
+### 1.3 Milestones & Achievements - [x]
 
 **Why:** Variable rewards keep users engaged long after the novelty wears off.
 Milestones give users something to work toward and something to share.
@@ -95,7 +95,7 @@ ApplicationSettings.
 
 ---
 
-### 1.4 Home Screen Widgets
+### 1.4 Home Screen Widgets - [ ]
 
 **Why:** Widgets keep the app visible without requiring the user to open it.
 They serve as both a reminder and a reward (seeing a high streak number). Widget
@@ -122,7 +122,7 @@ extensions alongside the NativeScript app.
 
 These features turn every engaged user into a distribution channel.
 
-### 2.1 Enhanced Share Cards
+### 2.1 Enhanced Share Cards - [ ]
 
 **Why:** The current share image is functional but generic. Beautiful,
 personalized share cards get posted to Instagram Stories, iMessage, and Twitter —
@@ -142,7 +142,7 @@ each post is a free impression.
 
 ---
 
-### 2.2 App Store Review Prompts
+### 2.2 App Store Review Prompts - [ ]
 
 **Why:** Ratings drive App Store ranking. Prompting at the right moment (peak
 positive emotion) dramatically increases 5-star review rates.
@@ -161,7 +161,7 @@ positive emotion) dramatically increases 5-star review rates.
 
 ---
 
-### 2.3 Year-in-Review / Annual Recap
+### 2.3 Year-in-Review / Annual Recap - [ ]
 
 **Why:** Spotify Wrapped proved that personalized annual recaps are the most
 viral content format in consumer apps. Users share them because the content is
@@ -187,7 +187,7 @@ about *them*.
 
 These features increase session duration and emotional investment.
 
-### 3.1 Prayer Journal / Notes
+### 3.1 Prayer Journal / Notes - [ ]
 
 **Why:** Turning a binary check-in into a reflective moment deepens the user's
 relationship with the app and makes the history tab far more valuable.
@@ -204,7 +204,7 @@ relationship with the app and makes the history tab far more valuable.
 
 ---
 
-### 3.2 Calendar Heat Map View
+### 3.2 Calendar Heat Map View - [ ]
 
 **Why:** GitHub's contribution graph is iconic because it makes consistency
 *visible*. A prayer calendar heat map gives users a powerful visual of their
@@ -224,7 +224,7 @@ devotion over time.
 
 ---
 
-### 3.3 Multiple Daily Prayer Slots
+### 3.3 Multiple Daily Prayer Slots - [ ]
 
 **Why:** Many users pray multiple times per day (morning, evening, before meals).
 Supporting this makes the app useful for the most devout users and increases
@@ -245,7 +245,7 @@ day with different slot values.
 
 ---
 
-### 3.4 Daily Scripture / Inspirational Quote
+### 3.4 Daily Scripture / Inspirational Quote - [ ]
 
 **Why:** Gives the user a reason to open the app even if they've already checked
 in. Creates a "daily discovery" moment.
@@ -266,7 +266,7 @@ in. Creates a "daily discovery" moment.
 
 These features elevate the app from "functional" to "delightful."
 
-### 4.1 Onboarding Flow
+### 4.1 Onboarding Flow - [ ]
 
 **Why:** First-time users who understand the value proposition and set up
 reminders in onboarding retain at 2-3x the rate of users who skip it.
@@ -283,7 +283,7 @@ reminders in onboarding retain at 2-3x the rate of users who skip it.
 
 ---
 
-### 4.2 Haptic Feedback & Animations
+### 4.2 Haptic Feedback & Animations - [ ]
 
 **Why:** Micro-interactions make check-ins feel rewarding. The "click" of a
 streak incrementing should feel satisfying.
@@ -301,7 +301,7 @@ streak incrementing should feel satisfying.
 
 ---
 
-### 4.3 Alternative App Icons
+### 4.3 Alternative App Icons - [ ]
 
 **Why:** Customizable app icons are a low-effort delight feature. Users who
 personalize their icon feel more ownership over the app.
@@ -319,7 +319,7 @@ personalize their icon feel more ownership over the app.
 
 ---
 
-### 4.4 Customizable Themes
+### 4.4 Customizable Themes - [ ]
 
 **Why:** Personalization increases attachment. Even 3-4 theme options make users
 feel the app is "theirs."
@@ -338,7 +338,7 @@ feel the app is "theirs."
 
 ---
 
-### 4.5 Apple Watch App
+### 4.5 Apple Watch App - [ ]
 
 **Why:** Wrist-based check-in removes all friction. Users can check in without
 pulling out their phone, which is especially valuable during/after prayer.
