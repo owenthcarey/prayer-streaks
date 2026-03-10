@@ -9,6 +9,7 @@ import { Dialogs, isIOS } from '@nativescript/core';
 import { CheckInService } from '../../core/services/checkin.service';
 import { MilestoneService } from '../../core/services/milestone.service';
 import { ReminderService } from '../../core/services/reminder.service';
+import { ReviewService } from '../../core/services/review.service';
 import { PrayerType, prayerTypeLabel } from '../../core/models/checkin.model';
 
 @Component({
@@ -22,6 +23,7 @@ export class SettingsComponent {
   checkinService = inject(CheckInService);
   milestoneService = inject(MilestoneService);
   reminderService = inject(ReminderService);
+  private reviewService = inject(ReviewService);
   prayerTypeLabel = prayerTypeLabel;
 
   isIOS = isIOS;
@@ -103,6 +105,7 @@ export class SettingsComponent {
         await this.reminderService.toggle(false);
       }
       this.milestoneService.resetAll();
+      this.reviewService.resetAll();
       this.checkinService.resetAll();
     }
   }

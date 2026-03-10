@@ -142,7 +142,7 @@ each post is a free impression.
 
 ---
 
-### 2.2 App Store Review Prompts - [ ]
+### 2.2 App Store Review Prompts - [x]
 
 **Why:** Ratings drive App Store ranking. Prompting at the right moment (peak
 positive emotion) dramatically increases 5-star review rates.

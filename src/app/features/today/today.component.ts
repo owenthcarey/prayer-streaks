@@ -11,6 +11,7 @@ import { isIOS } from '@nativescript/core';
 import { CheckInService } from '../../core/services/checkin.service';
 import { MilestoneService } from '../../core/services/milestone.service';
 import { ReminderService } from '../../core/services/reminder.service';
+import { ReviewService } from '../../core/services/review.service';
 import { ShareService } from '../../core/services/share.service';
 import { PrayerType, prayerTypeLabel } from '../../core/models/checkin.model';
 import { MILESTONES } from '../../core/models/milestone.model';
@@ -44,6 +45,7 @@ export class TodayComponent {
   checkinService = inject(CheckInService);
   milestoneService = inject(MilestoneService);
   private reminderService = inject(ReminderService);
+  private reviewService = inject(ReviewService);
   private shareService = inject(ShareService);
   selectedType = signal<PrayerType | undefined>(undefined);
 
@@ -190,8 +192,12 @@ export class TodayComponent {
 
   onCheckIn(): void {
     this.checkinService.checkIn(this.selectedType());
-    this.milestoneService.checkForNewMilestones();
+    const milestone = this.milestoneService.checkForNewMilestones();
     this.reminderService.rescheduleIfEnabled();
+    this.reviewService.evaluateReviewPrompt(
+      this.checkinService.currentStreak(),
+      milestone !== null
+    );
   }
 
   dismissCelebration(): void {
