@@ -67,6 +67,71 @@ export class ShareService {
     this.shareCard({ type: 'daily', currentStreak }, 'ocean', 'feed');
   }
 
+  shareTextFile(text: string, filename: string): void {
+    try {
+      const filePath = path.join(knownFolders.temp().path, filename);
+
+      if (isIOS) {
+        NSString.stringWithString(text).writeToFileAtomicallyEncodingError(
+          filePath, true, NSUTF8StringEncoding
+        );
+        this.openIOSShareSheetForFile(filePath);
+      } else {
+        const file = new java.io.File(filePath);
+        const writer = new java.io.FileWriter(file);
+        writer.write(text);
+        writer.flush();
+        writer.close();
+        this.openAndroidShareSheetForFile(filePath);
+      }
+    } catch (err) {
+      console.error('ShareService: failed to share text file', err);
+    }
+  }
+
+  private openIOSShareSheetForFile(filePath: string): void {
+    const fileURL = NSURL.fileURLWithPath(filePath);
+    const items = NSArray.arrayWithArray([fileURL]);
+    const activityVC = UIActivityViewController.alloc()
+      .initWithActivityItemsApplicationActivities(items, null);
+
+    const rootVC = this.iosRootViewController();
+    if (!rootVC) return;
+
+    if (activityVC.popoverPresentationController) {
+      activityVC.popoverPresentationController.sourceView = rootVC.view;
+      activityVC.popoverPresentationController.sourceRect = CGRectMake(
+        rootVC.view.bounds.size.width / 2,
+        rootVC.view.bounds.size.height / 2,
+        0, 0
+      );
+    }
+
+    rootVC.presentViewControllerAnimatedCompletion(activityVC, true, null);
+  }
+
+  private openAndroidShareSheetForFile(filePath: string): void {
+    const ctx = Utils.android.getApplicationContext();
+    const file = new java.io.File(filePath);
+    const authority = ctx.getPackageName() + '.provider';
+    const contentUri = androidx.core.content.FileProvider.getUriForFile(
+      ctx, authority, file
+    );
+
+    const intent = new android.content.Intent(
+      android.content.Intent.ACTION_SEND
+    );
+    intent.setType('text/plain');
+    intent.putExtra(android.content.Intent.EXTRA_STREAM, contentUri);
+    intent.addFlags(android.content.Intent.FLAG_GRANT_READ_URI_PERMISSION);
+
+    const chooser = android.content.Intent.createChooser(
+      intent, 'Export Prayer Journal'
+    );
+    chooser.addFlags(android.content.Intent.FLAG_ACTIVITY_NEW_TASK);
+    ctx.startActivity(chooser);
+  }
+
   // ---------------------------------------------------------------------------
   // Image Generation
   // ---------------------------------------------------------------------------

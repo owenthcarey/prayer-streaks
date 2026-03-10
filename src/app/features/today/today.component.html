@@ -319,6 +319,81 @@
           ></Label>
         </StackLayout>
       }
+
+      <!-- Prayer Journal -->
+      <StackLayout class="p-5 rounded-2xl bg-white dark:bg-[#1c1c1e] mt-6">
+        @if (journalSaved()) {
+          <Label
+            text="Today's Reflection"
+            class="text-sm font-semibold text-gray-500 dark:text-gray-400 mb-3 uppercase"
+          ></Label>
+          <Label
+            [text]="journalNote()"
+            textWrap="true"
+            class="text-base text-gray-800 dark:text-gray-200 leading-6"
+          ></Label>
+          <GridLayout columns="auto, auto" horizontalAlignment="center" class="mt-4" (tap)="onEditNote()">
+            <!-- iOS: SF Symbol -->
+            <Image
+              *ngIf="isIOS"
+              col="0"
+              src="sys://pencil"
+              tintColor="#6b7280"
+              width="16" height="16"
+              verticalAlignment="center"
+              class="mr-1"
+            ></Image>
+            <!-- Android: Material Icon -->
+            <Label
+              *ngIf="!isIOS"
+              col="0"
+              [text]="editIcon"
+              class="material-icon text-gray-500 mr-1"
+              style="font-size: 16"
+              verticalAlignment="center"
+            ></Label>
+            <Label
+              col="1"
+              text="Edit"
+              class="text-sm text-gray-500 dark:text-gray-400 font-medium"
+              verticalAlignment="center"
+            ></Label>
+          </GridLayout>
+        } @else {
+          <GridLayout columns="*, auto" class="mb-3">
+            <Label
+              col="0"
+              text="What's on your heart today?"
+              class="text-base font-medium text-gray-600 dark:text-gray-300"
+              verticalAlignment="center"
+            ></Label>
+            <Label
+              col="1"
+              text="Save"
+              (tap)="onSaveNote()"
+              [class]="
+                'text-sm px-4 py-2 rounded-lg font-semibold ' +
+                (journalNote().trim()
+                  ? 'bg-blue-600 text-white'
+                  : 'bg-gray-200 dark:bg-gray-700 text-gray-400')
+              "
+              verticalAlignment="center"
+            ></Label>
+          </GridLayout>
+          <TextView
+            [text]="journalNote()"
+            (textChange)="onJournalInput($event.value)"
+            hint="Reflect on your prayer..."
+            maxLength="500"
+            class="text-base p-3 rounded-xl bg-gray-50 dark:bg-[#2c2c2e] text-gray-800 dark:text-gray-200 border border-gray-200 dark:border-gray-600"
+            height="120"
+          ></TextView>
+          <Label
+            [text]="journalCharCount() + '/500'"
+            class="text-xs text-gray-400 dark:text-gray-500 mt-2"
+          ></Label>
+        }
+      </StackLayout>
     }
   </StackLayout>
 </ScrollView>

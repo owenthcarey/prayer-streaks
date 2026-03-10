@@ -3,8 +3,10 @@ import {
   Component,
   NO_ERRORS_SCHEMA,
   computed,
+  effect,
   inject,
   signal,
+  untracked,
 } from '@angular/core';
 import { NativeScriptCommonModule } from '@nativescript/angular';
 import { isIOS } from '@nativescript/core';
@@ -48,6 +50,8 @@ export class TodayComponent {
   private reviewService = inject(ReviewService);
   private shareService = inject(ShareService);
   selectedType = signal<PrayerType | undefined>(undefined);
+  journalNote = signal('');
+  journalSaved = signal(false);
 
   isIOS = isIOS;
   flameIcon = String.fromCharCode(0xef55);
@@ -55,8 +59,21 @@ export class TodayComponent {
   shareIcon = String.fromCharCode(0xe80d);
   shieldIcon = String.fromCharCode(0xe8e8);
   starIcon = String.fromCharCode(0xe838);
+  editIcon = String.fromCharCode(0xe254);
 
   prayerTypeLabel = prayerTypeLabel;
+
+  constructor() {
+    effect(() => {
+      const existingNote = this.checkinService.todayNote();
+      if (existingNote && !untracked(() => this.journalSaved())) {
+        this.journalNote.set(existingNote);
+        this.journalSaved.set(true);
+      }
+    });
+  }
+
+  journalCharCount = computed(() => this.journalNote().length);
 
   // --- Share panel state ---
 
@@ -198,6 +215,23 @@ export class TodayComponent {
       this.checkinService.currentStreak(),
       milestone !== null
     );
+    this.journalNote.set('');
+    this.journalSaved.set(false);
+  }
+
+  onJournalInput(text: string): void {
+    this.journalNote.set(text.slice(0, 500));
+  }
+
+  onSaveNote(): void {
+    const note = this.journalNote().trim();
+    if (!note) return;
+    this.checkinService.updateNote(getTodayISO(), note);
+    this.journalSaved.set(true);
+  }
+
+  onEditNote(): void {
+    this.journalSaved.set(false);
   }
 
   dismissCelebration(): void {

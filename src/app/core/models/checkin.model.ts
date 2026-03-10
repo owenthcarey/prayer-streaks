@@ -7,6 +7,8 @@ export interface CheckIn {
   prayerType?: PrayerType;
   /** Timestamp of the actual check-in */
   checkedInAt: number;
+  /** Optional journal note (max 500 chars) */
+  note?: string;
 }
 
 export const DEFAULT_PRAYER_TYPES: PrayerType[] = [

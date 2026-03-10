@@ -187,7 +187,7 @@ about *them*.
 
 These features increase session duration and emotional investment.
 
-### 3.1 Prayer Journal / Notes - [ ]
+### 3.1 Prayer Journal / Notes - [x]
 
 **Why:** Turning a binary check-in into a reflective moment deepens the user's
 relationship with the app and makes the history tab far more valuable.

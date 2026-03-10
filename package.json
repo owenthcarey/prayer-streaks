@@ -14,6 +14,7 @@
     "@angular/router": "~20.2.0",
     "@nativescript/angular": "^20.0.0",
     "@nativescript/core": "^9.0.15",
+    "@nativescript/iqkeyboardmanager": "^2.1.2",
     "@nativescript/local-notifications": "^6.4.0",
     "@norrix/client-sdk": "^0.0.27",
     "rxjs": "~7.8.0",

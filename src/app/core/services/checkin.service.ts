@@ -51,6 +51,11 @@ export class CheckInService {
     return this.checkIns().some((c) => c.date === today);
   });
 
+  todayNote = computed(() => {
+    const today = getTodayISO();
+    return this.checkIns().find((c) => c.date === today)?.note ?? '';
+  });
+
   currentStreak = computed(() => {
     const dates = [...this.allStreakDates()].sort((a, b) =>
       a > b ? -1 : 1
@@ -89,6 +94,40 @@ export class CheckInService {
       a.date > b.date ? -1 : 1
     );
     return limit ? sorted.slice(0, limit) : sorted;
+  }
+
+  updateNote(date: string, note: string): void {
+    const trimmed = note.slice(0, 500);
+    const updated = this.checkIns().map((c) =>
+      c.date === date ? { ...c, note: trimmed || undefined } : c
+    );
+    this.checkIns.set(updated);
+    this.saveCheckIns(updated);
+  }
+
+  searchCheckIns(keyword: string): CheckIn[] {
+    if (!keyword.trim()) return [];
+    const lower = keyword.toLowerCase();
+    return this.checkIns().filter(
+      (c) => c.note && c.note.toLowerCase().includes(lower)
+    );
+  }
+
+  exportJournalText(): string {
+    const entries = [...this.checkIns()]
+      .filter((c) => c.note)
+      .sort((a, b) => (a.date > b.date ? -1 : 1));
+
+    if (entries.length === 0) return '';
+
+    const lines = entries.map((c) => {
+      const typeLabel = c.prayerType
+        ? ` (${c.prayerType.charAt(0).toUpperCase() + c.prayerType.slice(1)})`
+        : '';
+      return `${c.date}${typeLabel}\n${c.note}\n`;
+    });
+
+    return `Prayer Journal\n${'='.repeat(40)}\n\n${lines.join('\n')}`;
   }
 
   addPrayerType(type: PrayerType): void {
