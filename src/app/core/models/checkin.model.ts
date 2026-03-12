@@ -1,4 +1,4 @@
-export type PrayerType = 'rosary' | 'scripture' | 'mass' | 'adoration' | 'other';
+export type PrayerType = 'scripture' | 'devotional' | 'intercession' | 'worship' | 'other';
 
 export type SlotStreakRequirement = 'any' | 'all';
 
@@ -21,10 +21,10 @@ export interface CheckIn {
 }
 
 export const DEFAULT_PRAYER_TYPES: PrayerType[] = [
-  'rosary',
   'scripture',
-  'mass',
-  'adoration',
+  'devotional',
+  'intercession',
+  'worship',
 ];
 
 export const DEFAULT_PRAYER_SLOTS: PrayerSlot[] = [

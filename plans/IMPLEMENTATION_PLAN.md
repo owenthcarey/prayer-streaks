@@ -236,7 +236,7 @@ export interface CheckIn {
   checkedInAt: number;
 }
 
-export type PrayerType = 'rosary' | 'scripture' | 'mass' | 'adoration' | 'other';
+export type PrayerType = 'scripture' | 'devotional' | 'intercession' | 'worship' | 'other';
 ```
 
 ### 4.2 Storage (offline-first)
@@ -290,8 +290,8 @@ get/set helpers with JSON serialization.
 │  └──────────────────┘    │
 │                          │
 │  Prayer type (optional): │
-│  [Rosary] [Scripture]    │  ← tag chips / SegmentedBar
-│  [Mass]   [Adoration]    │
+│  [Scripture] [Devotional]      │  ← tag chips / SegmentedBar
+│  [Intercession] [Worship]     │
 │                          │
 │  ✅ Checked in today     │  ← confirmation (after tap)
 │                          │
@@ -315,12 +315,12 @@ get/set helpers with JSON serialization.
 │  Longest streak:  30     │
 │                          │
 │  ── February 2026 ────── │  ← month header
-│  Feb 17  ✅  Rosary      │
-│  Feb 16  ✅  Scripture   │
-│  Feb 15  ✅  Mass        │
-│  Feb 14  ✅              │
-│  Feb 13  ❌  (missed)    │
-│  Feb 12  ✅  Adoration   │
+│  Feb 17  ✅  Scripture     │
+│  Feb 16  ✅  Devotional   │
+│  Feb 15  ✅  Intercession │
+│  Feb 14  ✅               │
+│  Feb 13  ❌  (missed)     │
+│  Feb 12  ✅  Worship      │
 │  ...                     │
 │                          │
 └──────────────────────────┘
@@ -341,10 +341,10 @@ get/set helpers with JSON serialization.
 │                          │
 │  Prayer Types            │
 │  ┌────────────────────┐  │
-│  │ ☑ Rosary           │  │
 │  │ ☑ Scripture        │  │
-│  │ ☑ Mass             │  │
-│  │ ☑ Adoration        │  │
+│  │ ☑ Devotional       │  │
+│  │ ☑ Intercession     │  │
+│  │ ☑ Worship          │  │
 │  │ + Add custom...    │  │
 │  └────────────────────┘  │
 │                          │
