@@ -7,16 +7,19 @@ import {
   signal,
 } from '@angular/core';
 import { NativeScriptCommonModule } from '@nativescript/angular';
-import { isIOS } from '@nativescript/core';
+import { Application, isIOS } from '@nativescript/core';
 import { CheckInService } from '../../core/services/checkin.service';
 import { ShareService } from '../../core/services/share.service';
 import { CheckIn, prayerTypeLabel } from '../../core/models/checkin.model';
 import {
+  formatDateISO,
   formatDisplayDate,
   getMonthYear,
   getTodayISO,
   addDays,
 } from '../../core/utils/date.utils';
+
+type ViewMode = 'list' | 'calendar' | 'year';
 
 export interface HistoryItem {
   date: string;
@@ -28,6 +31,30 @@ export interface HistoryItem {
   note?: string;
   isMonthHeader: boolean;
   isExpanded?: boolean;
+}
+
+export interface CalendarDay {
+  date: string;
+  dayOfMonth: number;
+  isCurrentMonth: boolean;
+  checked: boolean;
+  hasNote: boolean;
+  shielded: boolean;
+  isToday: boolean;
+}
+
+export interface CalendarCell extends CalendarDay {
+  gridRow: number;
+  gridCol: number;
+}
+
+export interface MiniMonth {
+  name: string;
+  monthIndex: number;
+  flatCells: CalendarCell[];
+  gridRow: number;
+  gridCol: number;
+  miniRowDefs: string;
 }
 
 @Component({
@@ -43,21 +70,54 @@ export class HistoryComponent {
 
   isIOS = isIOS;
 
-  checkIcon = String.fromCharCode(0xe86c);   // check_circle
-  closeIcon = String.fromCharCode(0xe5cd);   // close
-  shieldIcon = String.fromCharCode(0xe8e8);  // verified_user
-  searchIcon = String.fromCharCode(0xe8b6);  // search
-  exportIcon = String.fromCharCode(0xe2c6);  // file_download
-  expandIcon = String.fromCharCode(0xe5cf);  // expand_more
-  collapseIcon = String.fromCharCode(0xe5ce); // expand_less
-  noteIcon = String.fromCharCode(0xe244);    // edit_note
+  checkIcon = String.fromCharCode(0xe86c);
+  closeIcon = String.fromCharCode(0xe5cd);
+  shieldIcon = String.fromCharCode(0xe8e8);
+  searchIcon = String.fromCharCode(0xe8b6);
+  exportIcon = String.fromCharCode(0xe2c6);
+  expandIcon = String.fromCharCode(0xe5cf);
+  collapseIcon = String.fromCharCode(0xe5ce);
+  noteIcon = String.fromCharCode(0xe244);
+  prevIcon = String.fromCharCode(0xe5cb);
+  nextIcon = String.fromCharCode(0xe5cc);
+
+  dayNames = ['S', 'M', 'T', 'W', 'T', 'F', 'S'];
+
+  private monthLabels = [
+    'January', 'February', 'March', 'April', 'May', 'June',
+    'July', 'August', 'September', 'October', 'November', 'December',
+  ];
+
+  private shortMonthLabels = [
+    'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+    'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec',
+  ];
 
   searchQuery = signal('');
   expandedDates = signal<Set<string>>(new Set());
+  viewMode = signal<ViewMode>('year');
+  calendarMonth = signal(new Date().getMonth());
+  calendarYear = signal(new Date().getFullYear());
 
   hasJournalEntries = computed(() =>
     this.checkinService.checkIns().some((c) => !!c.note)
   );
+
+  currentMonthLabel = computed(
+    () => `${this.monthLabels[this.calendarMonth()]} ${this.calendarYear()}`
+  );
+
+  private calendarData = computed(() => {
+    const checkIns = this.checkinService.checkIns();
+    const checkInMap = new Map<string, CheckIn>();
+    for (const c of checkIns) checkInMap.set(c.date, c);
+    return {
+      checkInMap,
+      shieldedSet: new Set(this.checkinService.shieldedDates()),
+      shieldsOn: this.checkinService.shieldsEnabled(),
+      today: getTodayISO(),
+    };
+  });
 
   historyItems = computed(() => {
     const checkIns = this.checkinService.checkIns();
@@ -115,6 +175,126 @@ export class HistoryComponent {
     return items;
   });
 
+  calendarWeeks = computed(() => {
+    const { checkInMap, shieldedSet, shieldsOn, today } = this.calendarData();
+    return this.buildWeeksForMonth(
+      this.calendarYear(), this.calendarMonth(),
+      checkInMap, shieldedSet, shieldsOn, today,
+    );
+  });
+
+  calendarRowDefs = computed(() => {
+    const weekCount = this.calendarWeeks().length;
+    return '30, ' + Array(weekCount).fill('44').join(', ');
+  });
+
+  flatCalendarCells = computed(() => {
+    const weeks = this.calendarWeeks();
+    const cells: CalendarCell[] = [];
+    weeks.forEach((week, weekIndex) => {
+      week.forEach((day, dayIndex) => {
+        cells.push({ ...day, gridRow: weekIndex + 1, gridCol: dayIndex });
+      });
+    });
+    return cells;
+  });
+
+  yearMonths = computed(() => {
+    const year = this.calendarYear();
+    const { checkInMap, shieldedSet, shieldsOn, today } = this.calendarData();
+    const months: MiniMonth[] = [];
+    for (let m = 0; m < 12; m++) {
+      const weeks = this.buildWeeksForMonth(year, m, checkInMap, shieldedSet, shieldsOn, today);
+      const flatCells: CalendarCell[] = [];
+      weeks.forEach((week, weekIndex) => {
+        week.forEach((day, dayIndex) => {
+          flatCells.push({ ...day, gridRow: weekIndex + 2, gridCol: dayIndex });
+        });
+      });
+      months.push({
+        name: this.shortMonthLabels[m],
+        monthIndex: m,
+        flatCells,
+        gridRow: Math.floor(m / 3),
+        gridCol: m % 3,
+        miniRowDefs: `auto, 12, ${Array(weeks.length).fill('14').join(', ')}`,
+      });
+    }
+    return months;
+  });
+
+  setViewMode(mode: ViewMode): void {
+    this.viewMode.set(mode);
+  }
+
+  previousMonth(): void {
+    if (this.calendarMonth() === 0) {
+      this.calendarMonth.set(11);
+      this.calendarYear.update((y) => y - 1);
+    } else {
+      this.calendarMonth.update((m) => m - 1);
+    }
+  }
+
+  nextMonth(): void {
+    if (this.calendarMonth() === 11) {
+      this.calendarMonth.set(0);
+      this.calendarYear.update((y) => y + 1);
+    } else {
+      this.calendarMonth.update((m) => m + 1);
+    }
+  }
+
+  previousYear(): void {
+    this.calendarYear.update((y) => y - 1);
+  }
+
+  nextYear(): void {
+    this.calendarYear.update((y) => y + 1);
+  }
+
+  onCalendarSwipe(args: any): void {
+    if (args.direction === 2) this.nextMonth();
+    else if (args.direction === 1) this.previousMonth();
+  }
+
+  onYearSwipe(args: any): void {
+    if (args.direction === 2) this.nextYear();
+    else if (args.direction === 1) this.previousYear();
+  }
+
+  selectMonth(monthIndex: number): void {
+    this.calendarMonth.set(monthIndex);
+    this.viewMode.set('calendar');
+  }
+
+  getCellColor(day: CalendarDay): string {
+    if (!day.isCurrentMonth) return 'transparent';
+    if (day.shielded) return '#ede9fe';
+    if (day.checked && day.hasNote) return '#16a34a';
+    if (day.checked) return '#bbf7d0';
+    return 'transparent';
+  }
+
+  getCellTextColor(day: CalendarDay): string {
+    const isDark = Application.systemAppearance() === 'dark';
+    if (!day.isCurrentMonth) return isDark ? '#4b5563' : '#d1d5db';
+    if (day.checked && day.hasNote) return '#ffffff';
+    if (day.checked) return '#166534';
+    if (day.shielded) return '#7c3aed';
+    if (day.isToday) return '#2563eb';
+    return isDark ? '#e5e7eb' : '#374151';
+  }
+
+  getMiniCellColor(day: CalendarDay): string {
+    if (!day.isCurrentMonth) return 'transparent';
+    if (day.shielded) return '#ede9fe';
+    if (day.checked && day.hasNote) return '#16a34a';
+    if (day.checked) return '#86efac';
+    const isDark = Application.systemAppearance() === 'dark';
+    return isDark ? '#374151' : '#f3f4f6';
+  }
+
   onSearchInput(text: string): void {
     this.searchQuery.set(text);
   }
@@ -138,5 +318,65 @@ export class HistoryComponent {
     if (!text) return;
     this.shareService.shareTextFile(text, 'prayer-journal.txt');
   }
-}
 
+  private buildWeeksForMonth(
+    year: number,
+    month: number,
+    checkInMap: Map<string, CheckIn>,
+    shieldedSet: Set<string>,
+    shieldsOn: boolean,
+    today: string,
+  ): CalendarDay[][] {
+    const startDayOfWeek = new Date(year, month, 1).getDay();
+    const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+    const weeks: CalendarDay[][] = [];
+    let week: CalendarDay[] = [];
+
+    const prevDays = new Date(year, month, 0).getDate();
+    for (let i = startDayOfWeek - 1; i >= 0; i--) {
+      const day = prevDays - i;
+      const dateStr = formatDateISO(new Date(year, month - 1, day));
+      const ci = checkInMap.get(dateStr);
+      week.push({
+        date: dateStr, dayOfMonth: day, isCurrentMonth: false,
+        checked: !!ci, hasNote: !!ci?.note,
+        shielded: !ci && shieldsOn && shieldedSet.has(dateStr),
+        isToday: dateStr === today,
+      });
+    }
+
+    for (let day = 1; day <= daysInMonth; day++) {
+      const dateStr = formatDateISO(new Date(year, month, day));
+      const ci = checkInMap.get(dateStr);
+      week.push({
+        date: dateStr, dayOfMonth: day, isCurrentMonth: true,
+        checked: !!ci, hasNote: !!ci?.note,
+        shielded: !ci && shieldsOn && shieldedSet.has(dateStr),
+        isToday: dateStr === today,
+      });
+      if (week.length === 7) {
+        weeks.push(week);
+        week = [];
+      }
+    }
+
+    if (week.length > 0) {
+      let nextDay = 1;
+      while (week.length < 7) {
+        const dateStr = formatDateISO(new Date(year, month + 1, nextDay));
+        const ci = checkInMap.get(dateStr);
+        week.push({
+          date: dateStr, dayOfMonth: nextDay, isCurrentMonth: false,
+          checked: !!ci, hasNote: !!ci?.note,
+          shielded: !ci && shieldsOn && shieldedSet.has(dateStr),
+          isToday: dateStr === today,
+        });
+        nextDay++;
+      }
+      weeks.push(week);
+    }
+
+    return weeks;
+  }
+}

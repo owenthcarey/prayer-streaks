@@ -204,7 +204,7 @@ relationship with the app and makes the history tab far more valuable.
 
 ---
 
-### 3.2 Calendar Heat Map View - [ ]
+### 3.2 Calendar Heat Map View - [x]
 
 **Why:** GitHub's contribution graph is iconic because it makes consistency
 *visible*. A prayer calendar heat map gives users a powerful visual of their
