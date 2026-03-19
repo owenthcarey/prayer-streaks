@@ -38,13 +38,13 @@ Prayer Streaks is a simple, offline-first mobile app that helps you build a dail
 ## Screenshots
 
 <p align="center">
-  <img src="docs/images/screenshot-1.png" alt="Daily check-in" width="180" />
+  <img src="docs/assets/screenshot-1.png" alt="Daily check-in" width="180" />
   &nbsp;&nbsp;
-  <img src="docs/images/screenshot-2.png" alt="Streak tracking" width="180" />
+  <img src="docs/assets/screenshot-2.png" alt="Streak tracking" width="180" />
   &nbsp;&nbsp;
-  <img src="docs/images/screenshot-3.png" alt="Prayer history" width="180" />
+  <img src="docs/assets/screenshot-3.png" alt="Prayer history" width="180" />
   &nbsp;&nbsp;
-  <img src="docs/images/screenshot-4.png" alt="Prayer types" width="180" />
+  <img src="docs/assets/screenshot-4.png" alt="Prayer types" width="180" />
 </p>
 
 ## Download
