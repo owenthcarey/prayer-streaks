@@ -245,7 +245,7 @@ day with different slot values.
 
 ---
 
-### 3.4 Daily Scripture / Inspirational Quote - [ ]
+### 3.4 Daily Scripture / Inspirational Quote - [x]
 
 **Why:** Gives the user a reason to open the app even if they've already checked
 in. Creates a "daily discovery" moment.

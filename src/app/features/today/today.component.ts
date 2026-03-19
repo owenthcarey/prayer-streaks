@@ -12,6 +12,7 @@ import { NativeScriptCommonModule } from '@nativescript/angular';
 import { isIOS } from '@nativescript/core';
 import { CheckInService } from '../../core/services/checkin.service';
 import { MilestoneService } from '../../core/services/milestone.service';
+import { QuoteService } from '../../core/services/quote.service';
 import { ReminderService } from '../../core/services/reminder.service';
 import { ReviewService } from '../../core/services/review.service';
 import { ShareService } from '../../core/services/share.service';
@@ -50,12 +51,14 @@ const MONTH_NAMES = [
 export class TodayComponent {
   checkinService = inject(CheckInService);
   milestoneService = inject(MilestoneService);
+  private quoteService = inject(QuoteService);
   private reminderService = inject(ReminderService);
   private reviewService = inject(ReviewService);
   private shareService = inject(ShareService);
   selectedType = signal<PrayerType | undefined>(undefined);
   journalNote = signal('');
   journalSaved = signal(false);
+  quoteCopied = signal(false);
 
   isIOS = isIOS;
   flameIcon = String.fromCharCode(0xef55);
@@ -64,8 +67,12 @@ export class TodayComponent {
   shieldIcon = String.fromCharCode(0xe8e8);
   starIcon = String.fromCharCode(0xe838);
   editIcon = String.fromCharCode(0xe254);
+  copyIcon = String.fromCharCode(0xe14d);
 
   prayerTypeLabel = prayerTypeLabel;
+
+  dailyQuote = this.quoteService.getTodayQuote();
+  dailyQuoteSource = `\u2014${this.dailyQuote.source}`;
 
   constructor() {
     effect(() => {
@@ -337,5 +344,15 @@ export class TodayComponent {
       case 'monthly':
         return this.monthlyRecapData();
     }
+  }
+
+  onCopyQuote(): void {
+    this.quoteService.copyToClipboard(this.dailyQuote);
+    this.quoteCopied.set(true);
+    setTimeout(() => this.quoteCopied.set(false), 2000);
+  }
+
+  onShareQuote(): void {
+    this.quoteService.shareQuote(this.dailyQuote);
   }
 }

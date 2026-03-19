@@ -558,5 +558,84 @@
         </StackLayout>
       }
     }
+
+    <!-- Daily Scripture Quote -->
+    <GridLayout columns="4, *" class="rounded-2xl bg-white dark:bg-[#1c1c1e] mt-6">
+      <StackLayout col="0" class="rounded-l-2xl" backgroundColor="#818cf8" borderRadius="16 0 0 16"></StackLayout>
+      <StackLayout col="1" class="py-5 pr-5 pl-4">
+        <Label
+          text="Today's Scripture"
+          textTransform="none"
+          class="text-xs font-semibold text-indigo-500 dark:text-indigo-400 mb-3"
+          style="text-transform: uppercase"
+        ></Label>
+        <Label
+          [text]="dailyQuote.text"
+          textWrap="true"
+          textTransform="none"
+          class="text-base text-gray-800 dark:text-gray-200"
+          style="line-height: 8; font-style: italic"
+        ></Label>
+        <Label
+          [text]="dailyQuoteSource"
+          textTransform="none"
+          class="text-sm text-gray-500 dark:text-gray-400 mt-3 font-medium"
+        ></Label>
+        <GridLayout columns="auto, auto" horizontalAlignment="center" class="mt-4">
+          <GridLayout col="0" columns="auto, auto" class="mr-5 py-1 px-3" (tap)="onCopyQuote()">
+            <Image
+              *ngIf="isIOS"
+              col="0"
+              [src]="quoteCopied() ? 'sys://checkmark' : 'sys://doc.on.doc'"
+              [tintColor]="quoteCopied() ? '#22c55e' : '#6366f1'"
+              width="14" height="14"
+              verticalAlignment="center"
+              class="mr-1"
+            ></Image>
+            <Label
+              *ngIf="!isIOS"
+              col="0"
+              [text]="quoteCopied() ? checkIcon : copyIcon"
+              [class]="'material-icon mr-1 ' + (quoteCopied() ? 'text-green-500' : 'text-indigo-500')"
+              style="font-size: 14"
+              verticalAlignment="center"
+            ></Label>
+            <Label
+              col="1"
+              [text]="quoteCopied() ? 'Copied!' : 'Copy'"
+              textTransform="none"
+              [class]="'text-sm font-medium ' + (quoteCopied() ? 'text-green-500' : 'text-indigo-500 dark:text-indigo-400')"
+              verticalAlignment="center"
+            ></Label>
+          </GridLayout>
+          <GridLayout col="1" columns="auto, auto" class="py-1 px-3" (tap)="onShareQuote()">
+            <Image
+              *ngIf="isIOS"
+              col="0"
+              src="sys://square.and.arrow.up"
+              tintColor="#6366f1"
+              width="14" height="14"
+              verticalAlignment="center"
+              class="mr-1"
+            ></Image>
+            <Label
+              *ngIf="!isIOS"
+              col="0"
+              [text]="shareIcon"
+              class="material-icon text-indigo-500 mr-1"
+              style="font-size: 14"
+              verticalAlignment="center"
+            ></Label>
+            <Label
+              col="1"
+              text="Share"
+              textTransform="none"
+              class="text-sm text-indigo-500 dark:text-indigo-400 font-medium"
+              verticalAlignment="center"
+            ></Label>
+          </GridLayout>
+        </GridLayout>
+      </StackLayout>
+    </GridLayout>
   </StackLayout>
 </ScrollView>
