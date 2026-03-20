@@ -1,5 +1,25 @@
 ### Contributing to Prayer Streaks
 
+> **This project does not accept outside contributions.** The repository is
+> public and open source under GPL-3.0 for transparency, not collaboration.
+> Pull requests from external contributors will be closed without merging.
+>
+> **Why:** As the sole copyright holder, I can distribute the app on the Apple
+> App Store despite the tension between GPL-3.0 and Apple's FairPlay DRM.
+> Merging outside code would introduce a second copyright holder, and
+> distributing *their* GPL-3.0 code under Apple's DRM without explicit
+> permission would create the same legal conflict that forced VLC off the App
+> Store in 2011. Keeping the copyright undivided avoids this entirely.
+>
+> If this policy changes in the future, a Contributor License Agreement (CLA)
+> will be required before any outside code is merged, so that copyright over
+> the combined codebase remains under a single owner and App Store distribution
+> stays unambiguous. A Developer Certificate of Origin (DCO) would not be
+> sufficient here. A DCO only certifies that the contributor has the right to
+> submit the code under the project's license; it does not transfer copyright
+> or grant rights beyond the GPL-3.0, which means the DRM conflict with
+> Apple's App Store would remain unresolved.
+
 This repo uses Conventional Commits for all commits. Keep it simple: we do not use scopes.
 
 ## Conventional Commits
