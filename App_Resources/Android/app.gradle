@@ -9,6 +9,11 @@ android {
   buildToolsVersion "35"
   // ndkVersion ""
 
+  // Required by AGP 8.0+ when custom BuildConfig fields are used (e.g., Norrix)
+  buildFeatures {
+    buildConfig true
+  }
+
   defaultConfig {
     minSdkVersion 24
     targetSdkVersion 35

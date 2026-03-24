@@ -16,8 +16,7 @@ export default {
     ascPrivateKeyPath: './keys/AuthKey_Q5F446LJB5.p8',
   },
   android: {
-    keystorePath: './signing/release.keystore',
-    keyAlias: 'prayerstreaks',
+    playServiceAccountJsonPath: './keys/play-service-account.json',
   },
   defaultConfiguration: 'release',
 } satisfies NorrixConfig;
