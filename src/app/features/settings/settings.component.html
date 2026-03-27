@@ -1,218 +1,188 @@
-<ActionBar title="Prayer Streaks"></ActionBar>
+<ActionBar title="PRAYER STREAKS" flat="true"></ActionBar>
 
 <ScrollView>
-  <StackLayout class="px-5 pt-5 pb-8">
-    <!-- Prayer Types Section -->
-    <Label
-      text="Prayer Types"
-      class="text-2xl font-bold mb-4 dark:text-white"
+  <StackLayout class="px-5 pt-4 pb-8">
+
+    <!-- ==================== PRAYER TYPES ==================== -->
+    <Label text="PRAYER TYPES"
+      class="font-bold text-brut-ink-light dark:text-[#9ca3af] mb-3"
+      style="font-size: 11; letter-spacing: 0.15; text-transform: uppercase"
     ></Label>
-    <StackLayout class="rounded-2xl bg-white dark:bg-[#1c1c1e] px-4 py-3 mb-6">
+    <WrapLayout class="mb-5">
       @for (type of checkinService.prayerTypes(); track type) {
-        <GridLayout columns="*, auto" class="py-2 px-1 border-b border-gray-100 dark:border-gray-700">
-          <Label
-            col="0"
-            [text]="prayerTypeLabel(type)"
-            class="text-base text-gray-800 dark:text-gray-200"
+        <StackLayout orientation="horizontal"
+          class="bg-brut-card dark:bg-[#1c1c1e] border-3 border-brut-ink dark:border-[#5a5c5b] rounded-xl neo-shadow-sm px-4 py-2 mr-3 mb-3"
+        >
+          <Label [text]="prayerTypeLabel(type)"
+            class="font-bold text-brut-ink dark:text-[#e5e7eb]"
+            style="font-size: 13" verticalAlignment="center"
           ></Label>
-          <!-- iOS: SFSymbol -->
           <Image
-            *ngIf="isIOS"
-            col="1"
-            src="sys://xmark.circle.fill"
-            tintColor="#ef4444"
-            width="20" height="20"
-            class="px-3 py-1"
+            *ngIf="isIOS" src="sys://xmark.circle.fill" tintColor="#b31b25"
+            width="18" height="18" class="ml-2" verticalAlignment="center"
             (tap)="checkinService.removePrayerType(type)"
           ></Image>
-          <!-- Android: Material Icon -->
           <Label
-            *ngIf="!isIOS"
-            col="1"
-            [text]="cancelIcon"
-            class="material-icon text-red-500 px-3 py-1"
-            style="font-size: 20"
+            *ngIf="!isIOS" [text]="cancelIcon"
+            class="material-icon text-brut-error ml-2"
+            style="font-size: 18" verticalAlignment="center"
             (tap)="checkinService.removePrayerType(type)"
           ></Label>
-        </GridLayout>
+        </StackLayout>
       }
-      <GridLayout
-        columns="auto, *"
+      <StackLayout orientation="horizontal"
+        class="border-3 border-dashed border-brut-muted dark:border-[#5a5c5b] rounded-xl px-4 py-2 mr-3 mb-3"
         (tap)="addCustomType()"
-        class="mt-3 bg-blue-50 dark:bg-blue-900 rounded-xl p-3"
       >
-        <!-- iOS: SFSymbol -->
         <Image
-          *ngIf="isIOS"
-          col="0"
-          src="sys://plus.circle.fill"
-          tintColor="#2563eb"
-          width="20" height="20"
-          class="mr-2"
+          *ngIf="isIOS" src="sys://plus.circle.fill" tintColor="#005f99"
+          width="18" height="18" verticalAlignment="center" class="mr-2"
         ></Image>
-        <!-- Android: Material Icon -->
         <Label
-          *ngIf="!isIOS"
-          col="0"
-          [text]="addIcon"
-          class="material-icon text-blue-600 dark:text-blue-400 mr-2"
-          style="font-size: 20"
+          *ngIf="!isIOS" [text]="addIcon"
+          class="material-icon text-brut-primary mr-2"
+          style="font-size: 18" verticalAlignment="center"
         ></Label>
-        <Label
-          col="1"
-          text="Add custom..."
-          class="text-blue-600 dark:text-blue-400 text-base font-semibold"
+        <Label text="Add custom..."
+          class="font-bold text-brut-primary dark:text-brut-primary-light"
+          style="font-size: 13" verticalAlignment="center"
         ></Label>
-      </GridLayout>
-    </StackLayout>
+      </StackLayout>
+    </WrapLayout>
 
-    <!-- Reminders Section -->
-    <Label
-      text="Reminders"
-      class="text-2xl font-bold mb-4 dark:text-white"
-    ></Label>
-    <StackLayout class="rounded-2xl bg-white dark:bg-[#1c1c1e] px-4 py-3 mb-6">
-      <GridLayout columns="*, auto" class="py-2 px-1">
+    <!-- ==================== REMINDERS ==================== -->
+    <StackLayout class="bg-brut-card dark:bg-[#1c1c1e] border-3 border-brut-ink dark:border-[#5a5c5b] rounded-xl neo-shadow p-5 mb-5">
+      <GridLayout columns="auto, *, auto">
+        <Image
+          *ngIf="isIOS" col="0" src="sys://bell.badge.fill" tintColor="#005f99"
+          width="22" height="22" verticalAlignment="center" class="mr-3"
+        ></Image>
         <Label
-          col="0"
-          text="Daily Reminder"
-          class="text-base text-gray-800 dark:text-gray-200"
+          *ngIf="!isIOS" col="0" [text]="bellIcon"
+          class="material-icon text-brut-primary mr-3"
+          style="font-size: 22" verticalAlignment="center"
+        ></Label>
+        <Label col="1" text="DAILY REMINDERS"
+          class="font-bold text-brut-ink dark:text-[#e5e7eb]"
+          style="font-size: 16; letter-spacing: 0.05; text-transform: uppercase"
           verticalAlignment="center"
         ></Label>
-        <Switch
-          col="1"
+        <Switch col="2"
           [checked]="reminderService.enabled()"
           (checkedChange)="onReminderToggle($event)"
         ></Switch>
       </GridLayout>
       @if (reminderService.enabled()) {
-        <StackLayout class="border-t border-gray-100 dark:border-gray-700 pt-3 pb-1">
-          <GridLayout columns="*, auto" class="px-1 mb-2">
-            <Label
-              col="0"
-              text="Reminder Time"
-              class="text-sm text-gray-500 dark:text-gray-400"
-              verticalAlignment="center"
-            ></Label>
-            <Label
-              col="1"
-              [text]="reminderService.displayTime()"
-              class="text-sm text-blue-600 dark:text-blue-400 font-semibold"
-              verticalAlignment="center"
-            ></Label>
-          </GridLayout>
-          <TimePicker
-            (loaded)="onTimePickerLoaded($event)"
-          ></TimePicker>
-        </StackLayout>
+        <GridLayout columns="*, auto"
+          class="bg-brut-container dark:bg-[#2c2c2e] p-3 rounded-lg border-2 border-brut-ink dark:border-[#5a5c5b] mt-4"
+        >
+          <Label col="0" text="Notification Time"
+            class="text-brut-ink dark:text-[#e5e7eb] font-bold" style="font-size: 14"
+            verticalAlignment="center"
+          ></Label>
+          <Label col="1" [text]="reminderService.displayTime()"
+            class="font-bold text-brut-primary"
+            style="font-size: 18" verticalAlignment="center"
+          ></Label>
+        </GridLayout>
+        <TimePicker (loaded)="onTimePickerLoaded($event)" class="mt-2"></TimePicker>
       }
     </StackLayout>
 
-    <!-- Prayer Slots Section -->
-    <Label
-      text="Prayer Slots"
-      class="text-2xl font-bold mb-4 dark:text-white"
-    ></Label>
-    <StackLayout class="rounded-2xl bg-white dark:bg-[#1c1c1e] px-4 py-3 mb-6">
-      <GridLayout columns="*, auto" class="py-2 px-1">
+    <!-- ==================== PRAYER SLOTS ==================== -->
+    <StackLayout class="bg-brut-card dark:bg-[#1c1c1e] border-3 border-brut-ink dark:border-[#5a5c5b] rounded-xl neo-shadow p-5 mb-5">
+      <GridLayout columns="auto, *, auto">
+        <Image
+          *ngIf="isIOS" col="0" src="sys://list.bullet.rectangle.fill" tintColor="#005f99"
+          width="22" height="22" verticalAlignment="center" class="mr-3"
+        ></Image>
         <Label
-          col="0"
-          text="Multiple Daily Prayers"
-          class="text-base text-gray-800 dark:text-gray-200"
+          *ngIf="!isIOS" col="0" [text]="listIcon"
+          class="material-icon text-brut-primary mr-3"
+          style="font-size: 22" verticalAlignment="center"
+        ></Label>
+        <Label col="1" text="PRAYER SLOTS"
+          class="font-bold text-brut-ink dark:text-[#e5e7eb]"
+          style="font-size: 16; letter-spacing: 0.05; text-transform: uppercase"
           verticalAlignment="center"
         ></Label>
-        <Switch
-          col="1"
+        <Switch col="2"
           [checked]="checkinService.slotsEnabled()"
           (checkedChange)="onSlotsToggle($event)"
         ></Switch>
       </GridLayout>
-      <Label
-        text="Track multiple prayer times each day — morning, midday, evening, or custom."
-        class="text-sm text-gray-500 dark:text-gray-400 px-1 pb-2"
-        textWrap="true"
+      <Label text="Track multiple prayer times each day — morning, midday, evening, or custom."
+        class="text-sm text-brut-ink-light dark:text-[#9ca3af] mt-2" textWrap="true"
       ></Label>
       @if (checkinService.slotsEnabled()) {
-        <StackLayout class="border-t border-gray-100 dark:border-gray-700 pt-3">
+        <StackLayout class="mt-4"
+          style="border-top-width: 2; border-top-color: #e7e8e6"
+        >
           @for (slot of checkinService.prayerSlots(); track slot.id) {
-            <GridLayout columns="*, auto" class="py-2 px-1 border-b border-gray-100 dark:border-gray-700">
-              <Label
-                col="0"
-                [text]="slot.name"
-                class="text-base text-gray-800 dark:text-gray-200"
+            <GridLayout columns="*, auto"
+              class="bg-brut-card dark:bg-[#1c1c1e] border-3 border-brut-ink dark:border-[#5a5c5b] rounded-xl p-4 mt-3"
+            >
+              <Label col="0" [text]="slot.name"
+                class="font-bold text-brut-ink dark:text-[#e5e7eb]" style="font-size: 14"
+                verticalAlignment="center"
               ></Label>
-              <!-- iOS: SFSymbol -->
               <Image
-                *ngIf="isIOS"
-                col="1"
-                src="sys://xmark.circle.fill"
-                tintColor="#ef4444"
-                width="20" height="20"
-                class="px-3 py-1"
+                *ngIf="isIOS" col="1" src="sys://xmark.circle.fill" tintColor="#b31b25"
+                width="20" height="20" verticalAlignment="center"
                 (tap)="checkinService.removeSlot(slot.id)"
               ></Image>
-              <!-- Android: Material Icon -->
               <Label
-                *ngIf="!isIOS"
-                col="1"
-                [text]="cancelIcon"
-                class="material-icon text-red-500 px-3 py-1"
-                style="font-size: 20"
+                *ngIf="!isIOS" col="1" [text]="cancelIcon"
+                class="material-icon text-brut-error" style="font-size: 20"
+                verticalAlignment="center"
                 (tap)="checkinService.removeSlot(slot.id)"
               ></Label>
             </GridLayout>
           }
-          <GridLayout
-            columns="auto, *"
+          <StackLayout orientation="horizontal"
+            class="border-3 border-dashed border-brut-ink dark:border-[#5a5c5b] rounded-xl p-3 mt-3"
+            horizontalAlignment="center"
             (tap)="addSlot()"
-            class="mt-3 bg-blue-50 dark:bg-blue-900 rounded-xl p-3"
           >
-            <!-- iOS: SFSymbol -->
             <Image
-              *ngIf="isIOS"
-              col="0"
-              src="sys://plus.circle.fill"
-              tintColor="#2563eb"
-              width="20" height="20"
-              class="mr-2"
+              *ngIf="isIOS" src="sys://plus.circle.fill" tintColor="#005f99"
+              width="20" height="20" verticalAlignment="center" class="mr-2"
             ></Image>
-            <!-- Android: Material Icon -->
             <Label
-              *ngIf="!isIOS"
-              col="0"
-              [text]="addIcon"
-              class="material-icon text-blue-600 dark:text-blue-400 mr-2"
-              style="font-size: 20"
+              *ngIf="!isIOS" [text]="addIcon"
+              class="material-icon text-brut-primary mr-2"
+              style="font-size: 20" verticalAlignment="center"
             ></Label>
-            <Label
-              col="1"
-              text="Add slot..."
-              class="text-blue-600 dark:text-blue-400 text-base font-semibold"
+            <Label text="Add slot..."
+              class="font-bold text-brut-primary" style="font-size: 14"
+              verticalAlignment="center"
             ></Label>
-          </GridLayout>
+          </StackLayout>
 
           <!-- Streak requirement toggle -->
-          <Label
-            text="Streak Completion"
-            class="text-sm font-semibold text-gray-500 dark:text-gray-400 mt-4 mb-2 px-1 uppercase"
+          <Label text="STREAK COMPLETION"
+            class="font-bold text-brut-muted dark:text-[#9ca3af] mt-4 mb-2"
+            style="font-size: 10; letter-spacing: 0.15; text-transform: uppercase"
           ></Label>
-          <GridLayout columns="*, *" class="mb-2">
+          <GridLayout columns="*, *">
             <Label col="0" text="Any slot"
               [class]="
-                'text-center py-2 rounded-lg mr-1 text-sm font-medium border ' +
+                'text-center py-2 rounded-lg mr-1 font-bold border-2 ' +
                 (checkinService.slotStreakRequirement() === 'any'
-                  ? 'bg-blue-600 text-white border-blue-600'
-                  : 'bg-gray-50 dark:bg-[#2c2c2e] text-gray-600 dark:text-gray-300 border-gray-200 dark:border-gray-600')
+                  ? 'bg-brut-primary text-brut-on-primary border-brut-ink dark:border-[#5a5c5b]'
+                  : 'bg-brut-container dark:bg-[#2c2c2e] text-brut-ink dark:text-[#e5e7eb] border-brut-ink dark:border-[#5a5c5b]')
               "
+              style="font-size: 13"
               (tap)="onStreakRequirementChange('any')"
             ></Label>
             <Label col="1" text="All slots"
               [class]="
-                'text-center py-2 rounded-lg ml-1 text-sm font-medium border ' +
+                'text-center py-2 rounded-lg ml-1 font-bold border-2 ' +
                 (checkinService.slotStreakRequirement() === 'all'
-                  ? 'bg-blue-600 text-white border-blue-600'
-                  : 'bg-gray-50 dark:bg-[#2c2c2e] text-gray-600 dark:text-gray-300 border-gray-200 dark:border-gray-600')
+                  ? 'bg-brut-primary text-brut-on-primary border-brut-ink dark:border-[#5a5c5b]'
+                  : 'bg-brut-container dark:bg-[#2c2c2e] text-brut-ink dark:text-[#e5e7eb] border-brut-ink dark:border-[#5a5c5b]')
               "
+              style="font-size: 13"
               (tap)="onStreakRequirementChange('all')"
             ></Label>
           </GridLayout>
@@ -220,158 +190,148 @@
             [text]="checkinService.slotStreakRequirement() === 'any'
               ? 'Your streak counts if you complete at least one slot per day.'
               : 'Your streak counts only when you complete every slot each day.'"
-            class="text-xs text-gray-400 dark:text-gray-500 px-1 pb-1"
-            textWrap="true"
+            class="text-xs text-brut-muted dark:text-[#9ca3af] mt-2" textWrap="true"
           ></Label>
         </StackLayout>
       }
     </StackLayout>
 
-    <!-- Streak Shields Section -->
-    <Label
-      text="Streak Shields"
-      class="text-2xl font-bold mb-4 dark:text-white"
-    ></Label>
-    <StackLayout class="rounded-2xl bg-white dark:bg-[#1c1c1e] px-4 py-3 mb-6">
-      <GridLayout columns="*, auto" class="py-2 px-1">
+    <!-- ==================== STREAK SHIELDS ==================== -->
+    <StackLayout class="bg-brut-card dark:bg-[#1c1c1e] border-3 border-brut-gold-dark dark:border-brut-gold rounded-xl neo-shadow p-5 mb-5">
+      <GridLayout columns="auto, *, auto" class="mb-2">
+        <Image
+          *ngIf="isIOS" col="0" src="sys://shield.fill" tintColor="#6c5a00"
+          width="22" height="22" verticalAlignment="center" class="mr-3"
+        ></Image>
         <Label
-          col="0"
-          text="Use Streak Shields"
-          class="text-base text-gray-800 dark:text-gray-200"
+          *ngIf="!isIOS" col="0" [text]="shieldIcon"
+          class="material-icon text-brut-gold-dark mr-3"
+          style="font-size: 22" verticalAlignment="center"
+        ></Label>
+        <Label col="1" text="STREAK SHIELDS"
+          class="font-bold text-brut-ink dark:text-[#e5e7eb]"
+          style="font-size: 16; letter-spacing: 0.05; text-transform: uppercase"
           verticalAlignment="center"
         ></Label>
-        <Switch
-          col="1"
+        <Switch col="2"
           [checked]="checkinService.shieldsEnabled()"
           (checkedChange)="onShieldToggle($event)"
         ></Switch>
       </GridLayout>
-      <Label
-        text="Earn 1 shield every 7 days (max 3). Shields auto-protect your streak when you miss a day."
-        class="text-sm text-gray-500 dark:text-gray-400 px-1 pb-2"
-        textWrap="true"
+      <Label text="Earn 1 shield every 7 days (max 3). Shields auto-protect your streak when you miss a day."
+        class="text-sm text-brut-ink-light dark:text-[#9ca3af]" textWrap="true"
       ></Label>
       @if (checkinService.shieldsEnabled()) {
-        <GridLayout columns="auto, auto, *" class="border-t border-gray-100 dark:border-gray-700 pt-3 px-1 pb-1">
-          <!-- iOS: SF Symbol -->
+        <StackLayout orientation="horizontal"
+          class="bg-brut-card dark:bg-[#1c1c1e] border-3 border-brut-ink dark:border-[#5a5c5b] rounded-xl p-4 mt-4"
+        >
           <Image
-            *ngIf="isIOS"
-            col="0"
-            src="sys://shield.fill"
-            tintColor="#8b5cf6"
-            width="18" height="18"
-            verticalAlignment="center"
+            *ngIf="isIOS" src="sys://shield.fill" tintColor="#ffd709"
+            width="28" height="28" verticalAlignment="center" class="mr-3"
           ></Image>
-          <!-- Android: Material Icon -->
           <Label
-            *ngIf="!isIOS"
-            col="0"
-            [text]="shieldIcon"
-            class="material-icon text-purple-500"
-            style="font-size: 18"
-            verticalAlignment="center"
+            *ngIf="!isIOS" [text]="shieldIcon"
+            class="material-icon text-brut-gold mr-3"
+            style="font-size: 28" verticalAlignment="center"
           ></Label>
-          <Label
-            col="1"
-            [text]="checkinService.shieldCount() + ' available'"
-            class="text-base text-purple-500 font-semibold ml-2"
-            verticalAlignment="center"
-          ></Label>
-        </GridLayout>
+          <StackLayout verticalAlignment="center">
+            <Label [text]="checkinService.shieldCount() + ' Shields'"
+              class="font-bold text-brut-ink dark:text-[#e5e7eb]"
+              style="font-size: 20"
+            ></Label>
+            <Label text="AVAILABLE THIS MONTH"
+              class="font-bold text-brut-muted dark:text-[#9ca3af]"
+              style="font-size: 9; letter-spacing: 0.1; text-transform: uppercase"
+            ></Label>
+          </StackLayout>
+        </StackLayout>
       }
     </StackLayout>
 
-    <!-- Milestones Section -->
-    <Label
-      text="Milestones"
-      class="text-2xl font-bold mb-4 dark:text-white"
+    <!-- ==================== MILESTONES ==================== -->
+    <Label text="MILESTONES"
+      class="font-bold text-brut-ink-light dark:text-[#9ca3af] mb-3"
+      style="font-size: 11; letter-spacing: 0.15; text-transform: uppercase"
     ></Label>
-    <StackLayout class="rounded-2xl bg-white dark:bg-[#1c1c1e] px-4 py-3 mb-6">
+    <StackLayout class="mb-5">
       @for (milestone of milestoneService.allMilestones(); track milestone.id) {
-        <GridLayout columns="auto, *, auto, auto" class="py-3 px-1 border-b border-gray-100 dark:border-gray-700">
-          <!-- iOS: SFSymbol -->
-          <Image
-            *ngIf="isIOS"
-            col="0"
-            [src]="milestone.unlocked ? 'sys://star.fill' : 'sys://lock.fill'"
-            [tintColor]="milestone.unlocked ? '#f59e0b' : '#9ca3af'"
-            width="22" height="22"
-          ></Image>
-          <!-- Android: Material Icon -->
-          <Label
-            *ngIf="!isIOS"
-            col="0"
-            [text]="milestone.unlocked ? starIcon : lockIcon"
-            class="material-icon"
-            style="font-size: 22"
-            [class.text-amber-500]="milestone.unlocked"
-            [class.text-gray-400]="!milestone.unlocked"
-            width="24"
-          ></Label>
-          <Label
-            col="1"
-            [text]="milestone.title"
-            class="text-base ml-3"
-            [class.text-gray-800]="milestone.unlocked"
-            [class.dark:text-gray-200]="milestone.unlocked"
-            [class.text-gray-400]="!milestone.unlocked"
-            [class.dark:text-gray-500]="!milestone.unlocked"
-          ></Label>
-          <Label
-            col="2"
-            [text]="milestone.days + 'd'"
-            class="text-sm text-gray-400 dark:text-gray-500 mr-2"
-          ></Label>
-          <!-- iOS: check mark -->
+        <GridLayout columns="auto, *, auto"
+          [class]="
+            'border-3 rounded-xl neo-shadow p-4 mb-3 ' +
+            (milestone.unlocked
+              ? 'bg-brut-gold border-brut-ink dark:border-[#5a5c5b]'
+              : 'bg-brut-card dark:bg-[#1c1c1e] border-brut-ink dark:border-[#5a5c5b]')
+          "
+          [opacity]="milestone.unlocked ? 1 : 0.6"
+        >
+          <GridLayout col="0" width="44" height="44" borderRadius="22"
+            [class]="milestone.unlocked ? 'bg-brut-card border-3 border-brut-ink neo-shadow-sm mr-3' : 'bg-brut-container border-3 border-brut-ink mr-3'"
+          >
+            <Image
+              *ngIf="isIOS"
+              [src]="milestone.unlocked ? 'sys://star.fill' : 'sys://lock.fill'"
+              [tintColor]="milestone.unlocked ? '#6c5a00' : '#767776'"
+              width="20" height="20"
+              horizontalAlignment="center" verticalAlignment="center"
+            ></Image>
+            <Label
+              *ngIf="!isIOS"
+              [text]="milestone.unlocked ? starIcon : lockIcon"
+              class="material-icon text-center"
+              [class.text-brut-gold-dark]="milestone.unlocked"
+              [class.text-brut-muted]="!milestone.unlocked"
+              style="font-size: 20"
+              horizontalAlignment="center" verticalAlignment="center"
+            ></Label>
+          </GridLayout>
+          <StackLayout col="1" verticalAlignment="center">
+            <Label [text]="milestone.title"
+              class="font-bold"
+              [class.text-brut-ink]="milestone.unlocked"
+              [class.text-brut-muted]="!milestone.unlocked"
+              style="font-size: 15; letter-spacing: 0.05; text-transform: uppercase"
+            ></Label>
+            <Label [text]="milestone.days + '-DAY STREAK'"
+              class="font-bold text-brut-muted"
+              style="font-size: 9; letter-spacing: 0.1; text-transform: uppercase"
+            ></Label>
+          </StackLayout>
           <Image
             *ngIf="isIOS && milestone.unlocked"
-            col="3"
-            src="sys://checkmark"
-            tintColor="#22c55e"
-            width="16" height="16"
+            col="2" src="sys://checkmark" tintColor="#005f99"
+            width="18" height="18" verticalAlignment="center"
           ></Image>
-          <!-- Android: check mark -->
           <Label
             *ngIf="!isIOS && milestone.unlocked"
-            col="3"
-            [text]="checkSmallIcon"
-            class="material-icon text-green-500"
-            style="font-size: 16"
+            col="2" [text]="checkSmallIcon"
+            class="material-icon text-brut-primary"
+            style="font-size: 18" verticalAlignment="center"
           ></Label>
         </GridLayout>
       }
     </StackLayout>
 
-    <!-- App Info Section -->
-    <Label
-      text="App Info"
-      class="text-2xl font-bold mb-4 dark:text-white"
+    <!-- ==================== APP INFO ==================== -->
+    <Label text="PRAYER STREAKS V1.0.0"
+      class="text-center font-bold text-brut-muted mb-4"
+      style="font-size: 10; letter-spacing: 0.2; text-transform: uppercase"
     ></Label>
-    <StackLayout class="rounded-2xl bg-white dark:bg-[#1c1c1e] p-4 mb-6">
-      <GridLayout columns="*, auto" class="p-2 border-b border-gray-100 dark:border-gray-700">
-        <Label col="0" text="Version" class="text-base text-gray-700 dark:text-gray-300"></Label>
-        <Label col="1" text="1.0.0" class="text-base text-gray-500 dark:text-gray-400 font-medium"></Label>
-      </GridLayout>
-      <GridLayout columns="*, auto" class="p-2">
-        <Label col="0" text="App" class="text-base text-gray-700 dark:text-gray-300"></Label>
-        <Label
-          col="1"
-          text="Prayer Streaks"
-          class="text-base text-gray-500 dark:text-gray-400 font-medium"
-        ></Label>
-      </GridLayout>
-    </StackLayout>
 
     <!-- Dev Panel (debug builds only) -->
     @if (showDevPanel) {
       <ns-dev-panel></ns-dev-panel>
     }
 
-    <!-- Reset Section -->
-    <Button
-      text="Reset All Data"
+    <!-- ==================== RESET ==================== -->
+    <StackLayout
+      class="bg-brut-error-bg border-3 border-brut-ink dark:border-[#5a5c5b] rounded-xl neo-shadow p-4 mt-2"
       (tap)="resetAllData()"
-      class="bg-red-500 text-white text-lg p-4 rounded-2xl font-bold mt-3"
-    ></Button>
+    >
+      <Label text="RESET ALL DATA"
+        class="text-center font-bold text-brut-on-error"
+        style="font-size: 16; letter-spacing: 0.15; text-transform: uppercase"
+      ></Label>
+    </StackLayout>
+
   </StackLayout>
 </ScrollView>

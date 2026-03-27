@@ -40,6 +40,8 @@ export class SettingsComponent {
   starIcon = String.fromCharCode(0xe838);
   lockIcon = String.fromCharCode(0xe897);
   checkSmallIcon = String.fromCharCode(0xe5ca);
+  bellIcon = String.fromCharCode(0xe7f4);
+  listIcon = String.fromCharCode(0xe8ef);
 
   private updatingReminder = false;
   private timeChangeTimeout: ReturnType<typeof setTimeout> | undefined;

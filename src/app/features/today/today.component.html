@@ -1,134 +1,122 @@
-<ActionBar title="Prayer Streaks"></ActionBar>
+<ActionBar title="PRAYER STREAKS" flat="true"></ActionBar>
 
 <ScrollView>
-  <StackLayout class="px-5 pt-5 pb-8">
-    <!-- Streak display -->
-    <StackLayout class="text-center p-6 rounded-2xl bg-white dark:bg-[#1c1c1e] mb-6">
-      <!-- iOS: SF Symbol -->
-      <Image
-        *ngIf="isIOS"
-        src="sys://flame.fill"
-        tintColor="#f97316"
-        width="52" height="52"
-        class="mb-1"
-      ></Image>
-      <!-- Android: Material Icon -->
-      <Label
-        *ngIf="!isIOS"
-        [text]="flameIcon"
-        class="material-icon text-center text-orange-500 mb-1"
-        style="font-size: 52"
-      ></Label>
-      <Label
-        [text]="checkinService.currentStreak()"
-        class="text-center font-bold text-orange-500"
-        style="font-size: 52"
-      ></Label>
-      <Label
-        [text]="streakText()"
-        class="text-center text-xl text-gray-500 dark:text-gray-400 mt-2"
-      ></Label>
-      <Label
-        text="One prayerful day at a time."
-        class="text-center text-sm text-gray-400 dark:text-gray-500 mt-2"
-      ></Label>
+  <StackLayout class="px-4 pt-4 pb-8">
+
+    <!-- ==================== STREAK CARD ==================== -->
+    <StackLayout class="bg-brut-card dark:bg-[#1c1c1e] border-3 border-brut-ink dark:border-[#5a5c5b] rounded-xl neo-shadow p-5 mb-5">
+      <GridLayout columns="*, auto">
+        <StackLayout col="0" verticalAlignment="center">
+          <Label
+            [text]="streakText()"
+            class="font-bold text-brut-ink dark:text-[#e5e7eb]"
+            style="font-size: 24"
+          ></Label>
+          <Label
+            text="One prayerful day at a time."
+            class="text-sm text-brut-ink-light dark:text-[#9ca3af] mt-1"
+          ></Label>
+        </StackLayout>
+        <GridLayout col="1" width="72" height="72" borderRadius="36"
+          class="border-3 border-brut-ink dark:border-[#5a5c5b] bg-brut-gold neo-shadow-sm"
+        >
+          <Label
+            [text]="checkinService.currentStreak()"
+            class="text-center font-bold text-brut-ink"
+            style="font-size: 32"
+            horizontalAlignment="center" verticalAlignment="center"
+          ></Label>
+        </GridLayout>
+      </GridLayout>
+
       @if (nextMilestoneText()) {
         <Label
-          [text]="'Next: ' + nextMilestoneText()"
-          class="text-center text-xs text-amber-500 dark:text-amber-400 mt-2"
+          [text]="nextMilestoneText()"
+          class="font-bold text-brut-muted dark:text-[#9ca3af] mt-4"
+          style="font-size: 10; letter-spacing: 0.1; text-transform: uppercase"
         ></Label>
       }
-      @if (checkinService.shieldsEnabled()) {
-        <GridLayout columns="auto, auto" horizontalAlignment="center" class="mt-3">
-          <!-- iOS: SF Symbol -->
-          <Image
-            *ngIf="isIOS"
-            col="0"
-            src="sys://shield.fill"
-            tintColor="#8b5cf6"
-            width="16" height="16"
-            verticalAlignment="center"
-          ></Image>
-          <!-- Android: Material Icon -->
-          <Label
-            *ngIf="!isIOS"
-            col="0"
-            [text]="shieldIcon"
-            class="material-icon text-purple-500"
-            style="font-size: 16"
-            verticalAlignment="center"
-          ></Label>
-          <Label
-            col="1"
-            [text]="shieldCountText()"
-            class="text-sm text-purple-500 font-medium ml-1"
-            verticalAlignment="center"
-          ></Label>
-        </GridLayout>
-      }
-      @if (checkinService.currentStreak() > 0) {
-        <GridLayout columns="auto, auto" horizontalAlignment="center" class="mt-5" (tap)="onShare()">
-          <!-- iOS: SF Symbol -->
-          <Image
-            *ngIf="isIOS"
-            col="0"
-            src="sys://square.and.arrow.up"
-            tintColor="#f97316"
-            width="18" height="18"
-            verticalAlignment="center"
-            class="mr-1"
-          ></Image>
-          <!-- Android: Material Icon -->
-          <Label
-            *ngIf="!isIOS"
-            col="0"
-            [text]="shareIcon"
-            class="material-icon text-orange-500 mr-1"
-            style="font-size: 18"
-            verticalAlignment="center"
-          ></Label>
-          <Label
-            col="1"
-            text="Share"
-            class="text-base text-orange-500 font-semibold"
-            verticalAlignment="center"
-          ></Label>
-        </GridLayout>
-      }
+
+      <GridLayout columns="auto, *" class="mt-4">
+        @if (checkinService.shieldsEnabled()) {
+          <StackLayout col="0" orientation="horizontal"
+            class="bg-brut-container-high dark:bg-[#2c2c2e] px-3 py-1 rounded-full border-2 border-brut-ink dark:border-[#5a5c5b]"
+          >
+            <Image
+              *ngIf="isIOS" src="sys://shield.fill" tintColor="#6c5a00"
+              width="14" height="14" verticalAlignment="center"
+            ></Image>
+            <Label
+              *ngIf="!isIOS" [text]="shieldIcon"
+              class="material-icon text-brut-gold-dark"
+              style="font-size: 14" verticalAlignment="center"
+            ></Label>
+            <Label
+              [text]="shieldCountText()"
+              class="font-bold text-brut-ink dark:text-[#e5e7eb] ml-1"
+              style="font-size: 12" verticalAlignment="center"
+            ></Label>
+          </StackLayout>
+        }
+        @if (checkinService.currentStreak() > 0) {
+          <StackLayout col="1" orientation="horizontal" horizontalAlignment="right"
+            class="bg-brut-primary border-3 border-brut-ink dark:border-[#5a5c5b] rounded-xl neo-shadow-sm px-4 py-1"
+            (tap)="onShare()"
+          >
+            <Image
+              *ngIf="isIOS" src="sys://square.and.arrow.up" tintColor="#ecf3ff"
+              width="14" height="14" verticalAlignment="center" class="mr-1"
+            ></Image>
+            <Label
+              *ngIf="!isIOS" [text]="shareIcon"
+              class="material-icon text-brut-on-primary mr-1"
+              style="font-size: 14" verticalAlignment="center"
+            ></Label>
+            <Label
+              text="SHARE" class="font-bold text-brut-on-primary"
+              style="font-size: 11; letter-spacing: 0.1" verticalAlignment="center"
+            ></Label>
+          </StackLayout>
+        }
+      </GridLayout>
     </StackLayout>
 
-    <!-- Share card picker panel -->
+    <!-- ==================== SHARE PANEL ==================== -->
     @if (showSharePanel()) {
-      <StackLayout class="p-5 rounded-2xl bg-white dark:bg-[#1c1c1e] mb-6">
-        <Label
-          text="Share Your Prayer"
-          class="text-center text-lg font-bold text-gray-800 dark:text-gray-200 mb-4"
-        ></Label>
+      <StackLayout class="bg-brut-container-high dark:bg-[#2c2c2e] border-3 border-brut-ink dark:border-[#5a5c5b] rounded-xl neo-shadow p-5 mb-5">
+        <GridLayout columns="*, auto" class="mb-4">
+          <Label col="0" text="SHARE YOUR PROGRESS"
+            class="font-bold text-brut-ink dark:text-[#e5e7eb]"
+            style="font-size: 12; letter-spacing: 0.15; text-transform: uppercase"
+          ></Label>
+          <Label col="1" text="✕" class="text-brut-ink-light dark:text-[#9ca3af]"
+            style="font-size: 18" (tap)="closeSharePanel()"
+          ></Label>
+        </GridLayout>
 
-        <!-- Card type selector -->
-        <Label
-          text="Card Style"
-          class="text-sm text-gray-500 dark:text-gray-400 ml-1 mb-2"
+        <Label text="CARD STYLE"
+          class="font-bold text-brut-muted dark:text-[#9ca3af] mb-2"
+          style="font-size: 10; letter-spacing: 0.1; text-transform: uppercase"
         ></Label>
         <WrapLayout class="mb-4">
           @for (type of availableCardTypes(); track type) {
             <Label
               [text]="cardTypeLabels[type]"
               [class]="
-                'mr-2 mb-2 py-2 px-4 rounded-full text-sm font-medium border ' +
+                'mr-2 mb-2 py-2 px-4 rounded-full font-bold border-2 ' +
                 (selectedCardType() === type
-                  ? 'bg-blue-600 text-white border-blue-600'
-                  : 'bg-gray-50 dark:bg-[#2c2c2e] text-gray-600 dark:text-gray-300 border-gray-200 dark:border-gray-600')
+                  ? 'bg-brut-primary-light text-brut-primary-dark border-brut-ink dark:border-[#5a5c5b]'
+                  : 'bg-brut-surface dark:bg-[#1c1c1e] text-brut-ink dark:text-[#e5e7eb] border-brut-ink dark:border-[#5a5c5b]')
               "
+              style="font-size: 12"
               (tap)="selectCardType(type)"
             ></Label>
           }
         </WrapLayout>
 
-        <!-- Color theme selector -->
-        <Label
-          text="Color"
-          class="text-sm text-gray-500 dark:text-gray-400 ml-1 mb-2"
+        <Label text="COLOR"
+          class="font-bold text-brut-muted dark:text-[#9ca3af] mb-2"
+          style="font-size: 10; letter-spacing: 0.1; text-transform: uppercase"
         ></Label>
         <WrapLayout class="mb-4 ml-1">
           @for (g of gradients; track g.id) {
@@ -137,7 +125,9 @@
               [height]="selectedTheme() === g.id ? 44 : 36"
               [borderRadius]="selectedTheme() === g.id ? 22 : 18"
               [backgroundColor]="g.color1"
-              [opacity]="selectedTheme() === g.id ? 1 : 0.5"
+              [borderWidth]="selectedTheme() === g.id ? 3 : 2"
+              borderColor="#2d2f2e"
+              [opacity]="selectedTheme() === g.id ? 1 : 0.6"
               class="mr-3 mb-1"
               verticalAlignment="center"
               (tap)="selectTheme(g.id)"
@@ -145,120 +135,105 @@
           }
         </WrapLayout>
 
-        <!-- Format selector -->
-        <Label
-          text="Format"
-          class="text-sm text-gray-500 dark:text-gray-400 ml-1 mb-2"
+        <Label text="FORMAT"
+          class="font-bold text-brut-muted dark:text-[#9ca3af] mb-2"
+          style="font-size: 10; letter-spacing: 0.1; text-transform: uppercase"
         ></Label>
         <GridLayout columns="*, *" class="mb-5">
-          <Label
-            col="0"
-            text="Story 9:16"
+          <Label col="0" text="Story 9:16"
             [class]="
-              'text-center py-2 rounded-lg mr-1 text-sm font-medium border ' +
+              'text-center py-2 rounded-lg mr-1 font-bold border-2 ' +
               (selectedFormat() === 'story'
-                ? 'bg-blue-600 text-white border-blue-600'
-                : 'bg-gray-50 dark:bg-[#2c2c2e] text-gray-600 dark:text-gray-300 border-gray-200 dark:border-gray-600')
+                ? 'bg-brut-primary text-brut-on-primary border-brut-ink dark:border-[#5a5c5b]'
+                : 'bg-brut-card dark:bg-[#1c1c1e] text-brut-ink dark:text-[#e5e7eb] border-brut-ink dark:border-[#5a5c5b]')
             "
+            style="font-size: 13"
             (tap)="selectFormat('story')"
           ></Label>
-          <Label
-            col="1"
-            text="Feed 1:1"
+          <Label col="1" text="Feed 1:1"
             [class]="
-              'text-center py-2 rounded-lg ml-1 text-sm font-medium border ' +
+              'text-center py-2 rounded-lg ml-1 font-bold border-2 ' +
               (selectedFormat() === 'feed'
-                ? 'bg-blue-600 text-white border-blue-600'
-                : 'bg-gray-50 dark:bg-[#2c2c2e] text-gray-600 dark:text-gray-300 border-gray-200 dark:border-gray-600')
+                ? 'bg-brut-primary text-brut-on-primary border-brut-ink dark:border-[#5a5c5b]'
+                : 'bg-brut-card dark:bg-[#1c1c1e] text-brut-ink dark:text-[#e5e7eb] border-brut-ink dark:border-[#5a5c5b]')
             "
+            style="font-size: 13"
             (tap)="selectFormat('feed')"
           ></Label>
         </GridLayout>
 
-        <!-- Share buttons -->
         <GridLayout columns="3*, 2*" class="mb-3">
-          <Button
-            col="0"
-            text="Share"
-            (tap)="onShareNow()"
-            class="bg-blue-600 text-white text-base p-3 rounded-xl font-semibold mr-2"
+          <Button col="0" text="Share" (tap)="onShareNow()"
+            class="bg-brut-primary text-brut-on-primary text-base p-3 rounded-xl font-bold mr-2 border-3 border-brut-ink neo-shadow-sm"
           ></Button>
-          <Button
-            col="1"
-            text="IG Story"
-            textTransform="none"
-            (tap)="onShareInstagram()"
-            class="bg-purple-600 text-white text-base p-3 rounded-xl font-semibold"
+          <Button col="1" text="IG Story" textTransform="none" (tap)="onShareInstagram()"
+            class="bg-brut-gold text-brut-on-gold text-base p-3 rounded-xl font-bold border-3 border-brut-ink neo-shadow-sm"
           ></Button>
         </GridLayout>
 
-        <Label
-          text="Close"
-          class="text-center text-sm text-gray-400 dark:text-gray-500 mt-1"
+        <Label text="Close"
+          class="text-center text-sm text-brut-muted dark:text-[#9ca3af] mt-1"
           (tap)="closeSharePanel()"
         ></Label>
       </StackLayout>
     }
 
     @if (checkinService.slotsEnabled() && checkinService.prayerSlots().length > 0) {
-      <!-- =============== SLOT-BASED CHECK-IN =============== -->
+      <!-- ==================== SLOT-BASED CHECK-IN ==================== -->
 
-      <!-- Progress -->
       <Label
         [text]="progressText()"
-        class="text-center text-base font-semibold text-gray-500 dark:text-gray-400 mb-4"
+        class="text-center font-bold text-brut-ink-light dark:text-[#9ca3af] mb-4"
+        style="font-size: 13; letter-spacing: 0.05; text-transform: uppercase"
       ></Label>
 
       @if (milestoneService.pendingCelebration()) {
-        <!-- Milestone celebration -->
-        <StackLayout class="text-center p-8 rounded-2xl bg-amber-50 dark:bg-[#2a2000] border-2 border-amber-400 dark:border-amber-600 mb-4">
+        <StackLayout class="text-center bg-brut-gold border-3 border-brut-ink dark:border-[#5a5c5b] rounded-xl neo-shadow p-6 mb-4">
           <Image
-            *ngIf="isIOS"
-            src="sys://star.fill"
-            tintColor="#f59e0b"
-            width="56" height="56"
-            class="mb-1"
+            *ngIf="isIOS" src="sys://star.fill" tintColor="#6c5a00"
+            width="56" height="56" class="mb-1"
           ></Image>
           <Label
-            *ngIf="!isIOS"
-            [text]="starIcon"
-            class="material-icon text-center text-amber-500 mb-1"
+            *ngIf="!isIOS" [text]="starIcon"
+            class="material-icon text-center text-brut-gold-dark mb-1"
             style="font-size: 56"
           ></Label>
-          <Label text="Milestone Unlocked!"
-            class="text-center text-sm font-semibold text-amber-600 dark:text-amber-400 mt-2 uppercase"
+          <Label text="MILESTONE UNLOCKED!"
+            class="text-center font-bold text-brut-on-gold mt-2"
+            style="font-size: 11; letter-spacing: 0.15; text-transform: uppercase"
           ></Label>
           <Label [text]="milestoneService.pendingCelebration()?.title"
-            class="text-center text-2xl font-bold text-amber-700 dark:text-amber-300 mt-2"
+            class="text-center font-bold text-brut-ink mt-2"
+            style="font-size: 22"
           ></Label>
           <Label [text]="celebrationDaysText()"
-            class="text-center text-sm text-amber-600 dark:text-amber-400 mt-1"
+            class="text-center text-brut-on-gold mt-1" style="font-size: 13"
           ></Label>
           <GridLayout columns="auto, auto" horizontalAlignment="center" class="mt-5" (tap)="onShare('milestone')">
-            <Image *ngIf="isIOS" col="0" src="sys://square.and.arrow.up" tintColor="#d97706" width="18" height="18" verticalAlignment="center" class="mr-1"></Image>
-            <Label *ngIf="!isIOS" col="0" [text]="shareIcon" class="material-icon text-amber-600 mr-1" style="font-size: 18" verticalAlignment="center"></Label>
-            <Label col="1" text="Share" class="text-base text-amber-600 dark:text-amber-400 font-semibold" verticalAlignment="center"></Label>
+            <Image *ngIf="isIOS" col="0" src="sys://square.and.arrow.up" tintColor="#5b4b00" width="18" height="18" verticalAlignment="center" class="mr-1"></Image>
+            <Label *ngIf="!isIOS" col="0" [text]="shareIcon" class="material-icon text-brut-on-gold mr-1" style="font-size: 18" verticalAlignment="center"></Label>
+            <Label col="1" text="Share" class="text-base text-brut-on-gold font-bold" verticalAlignment="center"></Label>
           </GridLayout>
-          <Label text="Tap to continue" class="text-center text-sm text-amber-400 dark:text-amber-500 mt-4" (tap)="dismissCelebration()"></Label>
+          <Label text="Tap to continue" class="text-center text-sm text-brut-on-gold mt-4" style="opacity: 0.7" (tap)="dismissCelebration()"></Label>
         </StackLayout>
       }
 
-      <!-- Shared prayer type selector (only when there are unchecked slots) -->
       @if (!checkinService.todaySlotsComplete()) {
-        <Label
-          text="Prayer type (optional):"
-          class="text-base text-gray-500 dark:text-gray-400 ml-1 mb-2"
+        <Label text="PRAYER TYPE"
+          class="font-bold text-brut-muted dark:text-[#9ca3af] ml-1 mb-2"
+          style="font-size: 10; letter-spacing: 0.1; text-transform: uppercase"
         ></Label>
         <WrapLayout class="mb-4">
           @for (type of checkinService.prayerTypes(); track type) {
             <Label
               [text]="prayerTypeLabel(type)"
               [class]="
-                'mr-2 mb-2 py-2 px-4 rounded-full text-base font-medium border ' +
+                'mr-2 mb-2 py-2 px-4 rounded-full font-bold border-2 ' +
                 (selectedType() === type
-                  ? 'bg-blue-600 text-white border-blue-600'
-                  : 'bg-white dark:bg-[#1c1c1e] text-gray-700 dark:text-gray-300 border-gray-200 dark:border-gray-600')
+                  ? 'bg-brut-primary-light text-brut-primary-dark border-brut-ink dark:border-[#5a5c5b]'
+                  : 'bg-brut-surface dark:bg-[#1c1c1e] text-brut-ink dark:text-[#e5e7eb] border-brut-ink dark:border-[#5a5c5b]')
               "
+              style="font-size: 13"
               (tap)="selectType(type)"
             ></Label>
           }
@@ -266,54 +241,44 @@
       }
 
       <!-- Slot list -->
-      <StackLayout class="rounded-2xl bg-white dark:bg-[#1c1c1e] p-4 mb-4">
+      <StackLayout class="bg-brut-card dark:bg-[#1c1c1e] border-3 border-brut-ink dark:border-[#5a5c5b] rounded-xl neo-shadow p-4 mb-4">
         @for (slot of slotStatuses(); track slot.id) {
           <GridLayout
             columns="auto, *, auto"
-            class="py-3 px-2 border-b border-gray-100 dark:border-gray-700"
+            class="py-3 px-2"
+            style="border-bottom-width: 1; border-bottom-color: #e7e8e6"
           >
             @if (slot.done) {
               <Image
-                *ngIf="isIOS"
-                col="0"
-                src="sys://checkmark.circle.fill"
-                tintColor="#22c55e"
-                width="22" height="22"
+                *ngIf="isIOS" col="0" src="sys://checkmark.circle.fill"
+                tintColor="#005f99" width="22" height="22"
               ></Image>
               <Label
-                *ngIf="!isIOS"
-                col="0"
-                [text]="checkIcon"
-                class="material-icon text-green-500"
-                style="font-size: 22"
+                *ngIf="!isIOS" col="0" [text]="checkIcon"
+                class="material-icon text-brut-primary" style="font-size: 22"
               ></Label>
               <StackLayout col="1" class="ml-3" verticalAlignment="center">
-                <Label
-                  [text]="slot.name"
-                  class="text-base font-medium text-gray-800 dark:text-gray-200"
+                <Label [text]="slot.name"
+                  class="text-base font-bold text-brut-ink dark:text-[#e5e7eb]"
                 ></Label>
               </StackLayout>
               <Label
-                *ngIf="slot.prayerType"
-                col="2"
+                *ngIf="slot.prayerType" col="2"
                 [text]="prayerTypeLabel(slot.prayerType)"
-                class="text-xs text-gray-500 dark:text-gray-400 bg-gray-100 dark:bg-gray-700 rounded-full px-2 py-1"
+                class="text-xs text-brut-ink-light dark:text-[#9ca3af] bg-brut-container dark:bg-[#2c2c2e] rounded-full px-2 py-1 font-bold"
                 verticalAlignment="center"
               ></Label>
             } @else {
               <StackLayout col="0" width="22" height="22" borderRadius="11"
-                class="border-2 border-gray-300 dark:border-gray-600"
+                class="border-2 border-brut-muted dark:border-[#5a5c5b]"
               ></StackLayout>
-              <Label
-                col="1"
-                [text]="slot.name"
-                class="text-base font-medium text-gray-600 dark:text-gray-400 ml-3"
+              <Label col="1" [text]="slot.name"
+                class="text-base font-bold text-brut-ink-light dark:text-[#9ca3af] ml-3"
                 verticalAlignment="center"
               ></Label>
-              <Label
-                col="2"
-                text="Pray"
-                class="text-sm font-semibold text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900 rounded-lg px-4 py-2"
+              <Label col="2" text="PRAY"
+                class="font-bold text-brut-on-primary bg-brut-primary rounded-lg px-4 py-2 border-2 border-brut-ink dark:border-[#5a5c5b]"
+                style="font-size: 12; letter-spacing: 0.05"
                 verticalAlignment="center"
                 (tap)="onSlotCheckIn(slot)"
               ></Label>
@@ -323,319 +288,237 @@
       </StackLayout>
 
       @if (checkinService.todaySlotsComplete() && !milestoneService.pendingCelebration()) {
-        <StackLayout class="text-center p-6 rounded-2xl bg-white dark:bg-[#1c1c1e] mb-4">
-          <Image *ngIf="isIOS" src="sys://checkmark.circle.fill" tintColor="#22c55e" width="44" height="44" class="mb-1"></Image>
-          <Label *ngIf="!isIOS" [text]="checkIcon" class="material-icon text-center text-green-500 mb-1" style="font-size: 44"></Label>
-          <Label text="All prayers complete!" class="text-center text-xl font-bold text-green-600 mt-2"></Label>
-          <Label text="Come back tomorrow to keep your streak alive." class="text-center text-sm text-gray-500 dark:text-gray-400 mt-1"></Label>
+        <StackLayout class="text-center bg-brut-card dark:bg-[#1c1c1e] border-3 border-brut-ink dark:border-[#5a5c5b] rounded-xl neo-shadow p-6 mb-4">
+          <Image *ngIf="isIOS" src="sys://checkmark.circle.fill" tintColor="#005f99" width="44" height="44" class="mb-1"></Image>
+          <Label *ngIf="!isIOS" [text]="checkIcon" class="material-icon text-center text-brut-primary mb-1" style="font-size: 44"></Label>
+          <Label text="ALL PRAYERS COMPLETE!" class="text-center font-bold text-brut-primary mt-2" style="font-size: 18; letter-spacing: 0.05"></Label>
+          <Label text="Come back tomorrow to keep your streak alive." class="text-center text-sm text-brut-ink-light dark:text-[#9ca3af] mt-1"></Label>
         </StackLayout>
       }
 
-      <!-- Prayer Journal (shown when at least one slot is checked in) -->
       @if (checkinService.checkedInToday()) {
-        <StackLayout class="p-5 rounded-2xl bg-white dark:bg-[#1c1c1e] mt-2">
+        <StackLayout class="bg-brut-card dark:bg-[#1c1c1e] border-3 border-brut-ink dark:border-[#5a5c5b] rounded-xl neo-shadow p-5 mt-2">
           @if (journalSaved()) {
-            <Label text="Today's Reflection" class="text-sm font-semibold text-gray-500 dark:text-gray-400 mb-3 uppercase"></Label>
-            <Label [text]="journalNote()" textWrap="true" class="text-base text-gray-800 dark:text-gray-200 leading-6"></Label>
+            <Label text="TODAY'S REFLECTION"
+              class="font-bold text-brut-muted dark:text-[#9ca3af] mb-3"
+              style="font-size: 10; letter-spacing: 0.15; text-transform: uppercase"
+            ></Label>
+            <Label [text]="journalNote()" textWrap="true" class="text-base text-brut-ink dark:text-[#e5e7eb]" style="line-height: 6"></Label>
             <GridLayout columns="auto, auto" horizontalAlignment="center" class="mt-4" (tap)="onEditNote()">
-              <Image *ngIf="isIOS" col="0" src="sys://pencil" tintColor="#6b7280" width="16" height="16" verticalAlignment="center" class="mr-1"></Image>
-              <Label *ngIf="!isIOS" col="0" [text]="editIcon" class="material-icon text-gray-500 mr-1" style="font-size: 16" verticalAlignment="center"></Label>
-              <Label col="1" text="Edit" class="text-sm text-gray-500 dark:text-gray-400 font-medium" verticalAlignment="center"></Label>
+              <Image *ngIf="isIOS" col="0" src="sys://pencil" tintColor="#767776" width="16" height="16" verticalAlignment="center" class="mr-1"></Image>
+              <Label *ngIf="!isIOS" col="0" [text]="editIcon" class="material-icon text-brut-muted mr-1" style="font-size: 16" verticalAlignment="center"></Label>
+              <Label col="1" text="Edit" class="text-sm text-brut-muted dark:text-[#9ca3af] font-bold" verticalAlignment="center"></Label>
             </GridLayout>
           } @else {
-            <GridLayout columns="*, auto" class="mb-3">
-              <Label col="0" text="What's on your heart today?" class="text-base font-medium text-gray-600 dark:text-gray-300" verticalAlignment="center"></Label>
-              <Label col="1" text="Save" (tap)="onSaveNote()"
-                [class]="'text-sm px-4 py-2 rounded-lg font-semibold ' + (journalNote().trim() ? 'bg-blue-600 text-white' : 'bg-gray-200 dark:bg-gray-700 text-gray-400')"
+            <GridLayout columns="auto, *, auto" class="mb-3">
+              <Image *ngIf="isIOS" col="0" src="sys://pencil.and.outline" tintColor="#005f99" width="18" height="18" verticalAlignment="center" class="mr-2"></Image>
+              <Label *ngIf="!isIOS" col="0" [text]="editIcon" class="material-icon text-brut-primary mr-2" style="font-size: 18" verticalAlignment="center"></Label>
+              <Label col="1" text="DAILY REFLECTION"
+                class="font-bold text-brut-ink dark:text-[#e5e7eb]"
+                style="font-size: 14; letter-spacing: 0.1; text-transform: uppercase"
                 verticalAlignment="center"
               ></Label>
+              <Label col="2" text="Save" (tap)="onSaveNote()"
+                [class]="'font-bold px-4 py-2 rounded-lg border-2 border-brut-ink dark:border-[#5a5c5b] ' + (journalNote().trim() ? 'bg-brut-primary text-brut-on-primary' : 'bg-brut-container dark:bg-[#2c2c2e] text-brut-muted')"
+                style="font-size: 13" verticalAlignment="center"
+              ></Label>
             </GridLayout>
-            <TextView [text]="journalNote()" (textChange)="onJournalInput($event.value)" hint="Reflect on your prayer..." maxLength="500"
-              class="text-base p-3 rounded-xl bg-gray-50 dark:bg-[#2c2c2e] text-gray-800 dark:text-gray-200 border border-gray-200 dark:border-gray-600"
+            <TextView [text]="journalNote()" (textChange)="onJournalInput($event.value)" hint="Today's reflection..." maxLength="500"
+              class="text-base p-3 rounded-lg bg-brut-container-low dark:bg-[#2c2c2e] text-brut-ink dark:text-[#e5e7eb] border-2 border-brut-ink dark:border-[#5a5c5b]"
               height="120"
             ></TextView>
-            <Label [text]="journalCharCount() + '/500'" class="text-xs text-gray-400 dark:text-gray-500 mt-2"></Label>
+            <Label [text]="journalCharCount() + '/500'" class="text-xs text-brut-muted dark:text-[#9ca3af] mt-2"></Label>
           }
         </StackLayout>
       }
 
     } @else {
-      <!-- =============== SINGLE CHECK-IN (original) =============== -->
+      <!-- ==================== SINGLE CHECK-IN ==================== -->
 
       @if (!checkinService.checkedInToday()) {
-        <!-- Prayer type selector -->
-        <Label
-          text="Prayer type (optional):"
-          class="text-base text-gray-500 dark:text-gray-400 ml-1 mb-2"
+        <Label text="PRAYER TYPE"
+          class="font-bold text-brut-muted dark:text-[#9ca3af] ml-1 mb-2"
+          style="font-size: 10; letter-spacing: 0.1; text-transform: uppercase"
         ></Label>
-        <WrapLayout class="mb-6">
+        <WrapLayout class="mb-5">
           @for (type of checkinService.prayerTypes(); track type) {
             <Label
               [text]="prayerTypeLabel(type)"
               [class]="
-                'mr-2 mb-2 py-2 px-4 rounded-full text-base font-medium border ' +
+                'mr-2 mb-2 py-2 px-4 rounded-full font-bold border-2 ' +
                 (selectedType() === type
-                  ? 'bg-blue-600 text-white border-blue-600'
-                  : 'bg-white dark:bg-[#1c1c1e] text-gray-700 dark:text-gray-300 border-gray-200 dark:border-gray-600')
+                  ? 'bg-brut-primary-light text-brut-primary-dark border-brut-ink dark:border-[#5a5c5b]'
+                  : 'bg-brut-surface dark:bg-[#1c1c1e] text-brut-ink dark:text-[#e5e7eb] border-brut-ink dark:border-[#5a5c5b]')
               "
+              style="font-size: 13"
               (tap)="selectType(type)"
             ></Label>
           }
         </WrapLayout>
 
-        <!-- Check-in button -->
-        <Button
-          text="I Prayed Today"
+        <StackLayout
+          class="bg-brut-gold border-3 border-brut-ink dark:border-[#5a5c5b] rounded-xl neo-shadow py-6"
           (tap)="onCheckIn()"
-          class="bg-blue-600 text-white text-xl p-4 rounded-2xl font-bold"
-        ></Button>
+        >
+          <Image
+            *ngIf="isIOS" src="sys://sun.max.fill" tintColor="#2d2f2e"
+            width="36" height="36" horizontalAlignment="center" class="mb-2"
+          ></Image>
+          <Label
+            *ngIf="!isIOS" [text]="flameIcon"
+            class="material-icon text-center text-brut-ink mb-2"
+            style="font-size: 36"
+          ></Label>
+          <Label text="I PRAYED TODAY"
+            class="text-center font-bold text-brut-ink"
+            style="font-size: 22; letter-spacing: -0.02"
+          ></Label>
+        </StackLayout>
       } @else {
         @if (milestoneService.pendingCelebration()) {
-          <!-- Milestone celebration -->
-          <StackLayout class="text-center p-8 rounded-2xl bg-amber-50 dark:bg-[#2a2000] border-2 border-amber-400 dark:border-amber-600 mb-4">
-            <!-- iOS: SF Symbol -->
+          <StackLayout class="text-center bg-brut-gold border-3 border-brut-ink dark:border-[#5a5c5b] rounded-xl neo-shadow p-6 mb-4">
             <Image
-              *ngIf="isIOS"
-              src="sys://star.fill"
-              tintColor="#f59e0b"
-              width="56" height="56"
-              class="mb-1"
+              *ngIf="isIOS" src="sys://star.fill" tintColor="#6c5a00"
+              width="56" height="56" class="mb-1"
             ></Image>
-            <!-- Android: Material Icon -->
             <Label
-              *ngIf="!isIOS"
-              [text]="starIcon"
-              class="material-icon text-center text-amber-500 mb-1"
+              *ngIf="!isIOS" [text]="starIcon"
+              class="material-icon text-center text-brut-gold-dark mb-1"
               style="font-size: 56"
             ></Label>
-            <Label
-              text="Milestone Unlocked!"
-              class="text-center text-sm font-semibold text-amber-600 dark:text-amber-400 mt-2 uppercase"
+            <Label text="MILESTONE UNLOCKED!"
+              class="text-center font-bold text-brut-on-gold mt-2"
+              style="font-size: 11; letter-spacing: 0.15; text-transform: uppercase"
             ></Label>
-            <Label
-              [text]="milestoneService.pendingCelebration()?.title"
-              class="text-center text-2xl font-bold text-amber-700 dark:text-amber-300 mt-2"
+            <Label [text]="milestoneService.pendingCelebration()?.title"
+              class="text-center font-bold text-brut-ink mt-2" style="font-size: 22"
             ></Label>
-            <Label
-              [text]="celebrationDaysText()"
-              class="text-center text-sm text-amber-600 dark:text-amber-400 mt-1"
+            <Label [text]="celebrationDaysText()"
+              class="text-center text-brut-on-gold mt-1" style="font-size: 13"
             ></Label>
             <GridLayout columns="auto, auto" horizontalAlignment="center" class="mt-5" (tap)="onShare('milestone')">
-              <!-- iOS: SF Symbol -->
-              <Image
-                *ngIf="isIOS"
-                col="0"
-                src="sys://square.and.arrow.up"
-                tintColor="#d97706"
-                width="18" height="18"
-                verticalAlignment="center"
-                class="mr-1"
-              ></Image>
-              <!-- Android: Material Icon -->
-              <Label
-                *ngIf="!isIOS"
-                col="0"
-                [text]="shareIcon"
-                class="material-icon text-amber-600 mr-1"
-                style="font-size: 18"
-                verticalAlignment="center"
-              ></Label>
-              <Label
-                col="1"
-                text="Share"
-                class="text-base text-amber-600 dark:text-amber-400 font-semibold"
-                verticalAlignment="center"
-              ></Label>
+              <Image *ngIf="isIOS" col="0" src="sys://square.and.arrow.up" tintColor="#5b4b00" width="18" height="18" verticalAlignment="center" class="mr-1"></Image>
+              <Label *ngIf="!isIOS" col="0" [text]="shareIcon" class="material-icon text-brut-on-gold mr-1" style="font-size: 18" verticalAlignment="center"></Label>
+              <Label col="1" text="Share" class="text-base text-brut-on-gold font-bold" verticalAlignment="center"></Label>
             </GridLayout>
-            <Label
-              text="Tap to continue"
-              class="text-center text-sm text-amber-400 dark:text-amber-500 mt-4"
+            <Label text="Tap to continue"
+              class="text-center text-sm text-brut-on-gold mt-4" style="opacity: 0.7"
               (tap)="dismissCelebration()"
             ></Label>
           </StackLayout>
         } @else {
-          <!-- Confirmation -->
-          <StackLayout class="text-center p-8 rounded-2xl bg-white dark:bg-[#1c1c1e]">
-            <!-- iOS: SF Symbol -->
+          <StackLayout class="text-center bg-brut-card dark:bg-[#1c1c1e] border-3 border-brut-ink dark:border-[#5a5c5b] rounded-xl neo-shadow p-8">
             <Image
-              *ngIf="isIOS"
-              src="sys://checkmark.circle.fill"
-              tintColor="#22c55e"
-              width="52" height="52"
-              class="mb-1"
+              *ngIf="isIOS" src="sys://checkmark.circle.fill" tintColor="#005f99"
+              width="52" height="52" class="mb-1"
             ></Image>
-            <!-- Android: Material Icon -->
             <Label
-              *ngIf="!isIOS"
-              [text]="checkIcon"
-              class="material-icon text-center text-green-500 mb-1"
+              *ngIf="!isIOS" [text]="checkIcon"
+              class="material-icon text-center text-brut-primary mb-1"
               style="font-size: 52"
             ></Label>
-            <Label
-              text="Checked in today!"
-              class="text-center text-2xl font-bold text-green-600 mt-3"
+            <Label text="CHECKED IN TODAY!"
+              class="text-center font-bold text-brut-primary mt-3"
+              style="font-size: 20; letter-spacing: 0.05"
             ></Label>
-            <Label
-              text="Come back tomorrow to keep your streak alive."
-              class="text-center text-sm text-gray-500 dark:text-gray-400 mt-2"
+            <Label text="Come back tomorrow to keep your streak alive."
+              class="text-center text-sm text-brut-ink-light dark:text-[#9ca3af] mt-2"
             ></Label>
           </StackLayout>
         }
 
-        <!-- Prayer Journal -->
-        <StackLayout class="p-5 rounded-2xl bg-white dark:bg-[#1c1c1e] mt-6">
+        <!-- Prayer Journal (single mode) -->
+        <StackLayout class="bg-brut-card dark:bg-[#1c1c1e] border-3 border-brut-ink dark:border-[#5a5c5b] rounded-xl neo-shadow p-5 mt-5">
           @if (journalSaved()) {
-            <Label
-              text="Today's Reflection"
-              class="text-sm font-semibold text-gray-500 dark:text-gray-400 mb-3 uppercase"
+            <Label text="TODAY'S REFLECTION"
+              class="font-bold text-brut-muted dark:text-[#9ca3af] mb-3"
+              style="font-size: 10; letter-spacing: 0.15; text-transform: uppercase"
             ></Label>
-            <Label
-              [text]="journalNote()"
-              textWrap="true"
-              class="text-base text-gray-800 dark:text-gray-200 leading-6"
+            <Label [text]="journalNote()" textWrap="true"
+              class="text-base text-brut-ink dark:text-[#e5e7eb]" style="line-height: 6"
             ></Label>
             <GridLayout columns="auto, auto" horizontalAlignment="center" class="mt-4" (tap)="onEditNote()">
-              <!-- iOS: SF Symbol -->
-              <Image
-                *ngIf="isIOS"
-                col="0"
-                src="sys://pencil"
-                tintColor="#6b7280"
-                width="16" height="16"
-                verticalAlignment="center"
-                class="mr-1"
-              ></Image>
-              <!-- Android: Material Icon -->
-              <Label
-                *ngIf="!isIOS"
-                col="0"
-                [text]="editIcon"
-                class="material-icon text-gray-500 mr-1"
-                style="font-size: 16"
-                verticalAlignment="center"
-              ></Label>
-              <Label
-                col="1"
-                text="Edit"
-                class="text-sm text-gray-500 dark:text-gray-400 font-medium"
-                verticalAlignment="center"
-              ></Label>
+              <Image *ngIf="isIOS" col="0" src="sys://pencil" tintColor="#767776" width="16" height="16" verticalAlignment="center" class="mr-1"></Image>
+              <Label *ngIf="!isIOS" col="0" [text]="editIcon" class="material-icon text-brut-muted mr-1" style="font-size: 16" verticalAlignment="center"></Label>
+              <Label col="1" text="Edit" class="text-sm text-brut-muted dark:text-[#9ca3af] font-bold" verticalAlignment="center"></Label>
             </GridLayout>
           } @else {
-            <GridLayout columns="*, auto" class="mb-3">
-              <Label
-                col="0"
-                text="What's on your heart today?"
-                class="text-base font-medium text-gray-600 dark:text-gray-300"
+            <GridLayout columns="auto, *, auto" class="mb-3">
+              <Image *ngIf="isIOS" col="0" src="sys://pencil.and.outline" tintColor="#005f99" width="18" height="18" verticalAlignment="center" class="mr-2"></Image>
+              <Label *ngIf="!isIOS" col="0" [text]="editIcon" class="material-icon text-brut-primary mr-2" style="font-size: 18" verticalAlignment="center"></Label>
+              <Label col="1" text="DAILY REFLECTION"
+                class="font-bold text-brut-ink dark:text-[#e5e7eb]"
+                style="font-size: 14; letter-spacing: 0.1; text-transform: uppercase"
                 verticalAlignment="center"
               ></Label>
-              <Label
-                col="1"
-                text="Save"
-                (tap)="onSaveNote()"
-                [class]="
-                  'text-sm px-4 py-2 rounded-lg font-semibold ' +
-                  (journalNote().trim()
-                    ? 'bg-blue-600 text-white'
-                    : 'bg-gray-200 dark:bg-gray-700 text-gray-400')
-                "
-                verticalAlignment="center"
+              <Label col="2" text="Save" (tap)="onSaveNote()"
+                [class]="'font-bold px-4 py-2 rounded-lg border-2 border-brut-ink dark:border-[#5a5c5b] ' + (journalNote().trim() ? 'bg-brut-primary text-brut-on-primary' : 'bg-brut-container dark:bg-[#2c2c2e] text-brut-muted')"
+                style="font-size: 13" verticalAlignment="center"
               ></Label>
             </GridLayout>
-            <TextView
-              [text]="journalNote()"
-              (textChange)="onJournalInput($event.value)"
-              hint="Reflect on your prayer..."
-              maxLength="500"
-              class="text-base p-3 rounded-xl bg-gray-50 dark:bg-[#2c2c2e] text-gray-800 dark:text-gray-200 border border-gray-200 dark:border-gray-600"
+            <TextView [text]="journalNote()" (textChange)="onJournalInput($event.value)" hint="Today's reflection..." maxLength="500"
+              class="text-base p-3 rounded-lg bg-brut-container-low dark:bg-[#2c2c2e] text-brut-ink dark:text-[#e5e7eb] border-2 border-brut-ink dark:border-[#5a5c5b]"
               height="120"
             ></TextView>
-            <Label
-              [text]="journalCharCount() + '/500'"
-              class="text-xs text-gray-400 dark:text-gray-500 mt-2"
-            ></Label>
+            <Label [text]="journalCharCount() + '/500'" class="text-xs text-brut-muted dark:text-[#9ca3af] mt-2"></Label>
           }
         </StackLayout>
       }
     }
 
-    <!-- Daily Scripture Quote -->
-    <GridLayout columns="4, *" class="rounded-2xl bg-white dark:bg-[#1c1c1e] mt-6">
-      <StackLayout col="0" class="rounded-l-2xl" backgroundColor="#818cf8" borderRadius="16 0 0 16"></StackLayout>
-      <StackLayout col="1" class="py-5 pr-5 pl-4">
-        <Label
-          text="Today's Scripture"
-          textTransform="none"
-          class="text-xs font-semibold text-indigo-500 dark:text-indigo-400 mb-3"
-          style="text-transform: uppercase"
-        ></Label>
-        <Label
-          [text]="dailyQuote.text"
-          textWrap="true"
-          textTransform="none"
-          class="text-base text-gray-800 dark:text-gray-200"
-          style="line-height: 8; font-style: italic"
-        ></Label>
-        <Label
-          [text]="dailyQuoteSource"
-          textTransform="none"
-          class="text-sm text-gray-500 dark:text-gray-400 mt-3 font-medium"
-        ></Label>
-        <GridLayout columns="auto, auto" horizontalAlignment="center" class="mt-4">
-          <GridLayout col="0" columns="auto, auto" class="mr-5 py-1 px-3" (tap)="onCopyQuote()">
-            <Image
-              *ngIf="isIOS"
-              col="0"
-              [src]="quoteCopied() ? 'sys://checkmark' : 'sys://doc.on.doc'"
-              [tintColor]="quoteCopied() ? '#22c55e' : '#6366f1'"
-              width="14" height="14"
-              verticalAlignment="center"
-              class="mr-1"
-            ></Image>
-            <Label
-              *ngIf="!isIOS"
-              col="0"
-              [text]="quoteCopied() ? checkIcon : copyIcon"
-              [class]="'material-icon mr-1 ' + (quoteCopied() ? 'text-green-500' : 'text-indigo-500')"
-              style="font-size: 14"
-              verticalAlignment="center"
-            ></Label>
-            <Label
-              col="1"
-              [text]="quoteCopied() ? 'Copied!' : 'Copy'"
-              textTransform="none"
-              [class]="'text-sm font-medium ' + (quoteCopied() ? 'text-green-500' : 'text-indigo-500 dark:text-indigo-400')"
-              verticalAlignment="center"
-            ></Label>
-          </GridLayout>
-          <GridLayout col="1" columns="auto, auto" class="py-1 px-3" (tap)="onShareQuote()">
-            <Image
-              *ngIf="isIOS"
-              col="0"
-              src="sys://square.and.arrow.up"
-              tintColor="#6366f1"
-              width="14" height="14"
-              verticalAlignment="center"
-              class="mr-1"
-            ></Image>
-            <Label
-              *ngIf="!isIOS"
-              col="0"
-              [text]="shareIcon"
-              class="material-icon text-indigo-500 mr-1"
-              style="font-size: 14"
-              verticalAlignment="center"
-            ></Label>
-            <Label
-              col="1"
-              text="Share"
-              textTransform="none"
-              class="text-sm text-indigo-500 dark:text-indigo-400 font-medium"
-              verticalAlignment="center"
-            ></Label>
-          </GridLayout>
+    <!-- ==================== DAILY SCRIPTURE ==================== -->
+    <StackLayout class="bg-brut-primary border-3 border-brut-ink dark:border-[#5a5c5b] rounded-xl neo-shadow mt-5 p-6">
+      <Label text="TODAY'S SCRIPTURE"
+        class="font-bold text-brut-on-primary mb-3"
+        style="font-size: 10; letter-spacing: 0.15; text-transform: uppercase; opacity: 0.8"
+      ></Label>
+      <Label
+        [text]="dailyQuote.text" textWrap="true" textTransform="none"
+        class="text-brut-on-primary"
+        style="font-size: 18; line-height: 8; font-style: italic"
+      ></Label>
+      <Label
+        [text]="dailyQuoteSource" textTransform="none"
+        class="font-bold text-brut-on-primary mt-3"
+        style="font-size: 11; letter-spacing: 0.15; text-transform: uppercase; opacity: 0.8"
+      ></Label>
+      <GridLayout columns="auto, auto" horizontalAlignment="center" class="mt-4">
+        <GridLayout col="0" columns="auto, auto" class="mr-5 py-1 px-3" (tap)="onCopyQuote()">
+          <Image
+            *ngIf="isIOS" col="0"
+            [src]="quoteCopied() ? 'sys://checkmark' : 'sys://doc.on.doc'"
+            [tintColor]="quoteCopied() ? '#ffd709' : '#ecf3ff'"
+            width="14" height="14" verticalAlignment="center" class="mr-1"
+          ></Image>
+          <Label
+            *ngIf="!isIOS" col="0"
+            [text]="quoteCopied() ? checkIcon : copyIcon"
+            [class]="'material-icon mr-1 ' + (quoteCopied() ? 'text-brut-gold' : 'text-brut-on-primary')"
+            style="font-size: 14" verticalAlignment="center"
+          ></Label>
+          <Label col="1"
+            [text]="quoteCopied() ? 'Copied!' : 'Copy'" textTransform="none"
+            [class]="'font-bold ' + (quoteCopied() ? 'text-brut-gold' : 'text-brut-on-primary')"
+            style="font-size: 13" verticalAlignment="center"
+          ></Label>
         </GridLayout>
-      </StackLayout>
-    </GridLayout>
+        <GridLayout col="1" columns="auto, auto" class="py-1 px-3" (tap)="onShareQuote()">
+          <Image
+            *ngIf="isIOS" col="0" src="sys://square.and.arrow.up" tintColor="#ecf3ff"
+            width="14" height="14" verticalAlignment="center" class="mr-1"
+          ></Image>
+          <Label
+            *ngIf="!isIOS" col="0" [text]="shareIcon"
+            class="material-icon text-brut-on-primary mr-1"
+            style="font-size: 14" verticalAlignment="center"
+          ></Label>
+          <Label col="1" text="Share" textTransform="none"
+            class="font-bold text-brut-on-primary"
+            style="font-size: 13" verticalAlignment="center"
+          ></Label>
+        </GridLayout>
+      </GridLayout>
+    </StackLayout>
+
   </StackLayout>
 </ScrollView>
