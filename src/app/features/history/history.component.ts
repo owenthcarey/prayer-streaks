@@ -301,29 +301,29 @@ export class HistoryComponent {
 
   getCellColor(day: CalendarDay): string {
     if (!day.isCurrentMonth) return 'transparent';
-    if (day.shielded) return '#ede9fe';
-    if (day.checked && day.hasNote) return '#16a34a';
-    if (day.checked) return '#bbf7d0';
+    if (day.shielded) return '#ffd709';
+    if (day.checked && day.hasNote) return '#63b4fd';
+    if (day.checked) return '#005f99';
     return 'transparent';
   }
 
   getCellTextColor(day: CalendarDay): string {
     const isDark = Application.systemAppearance() === 'dark';
-    if (!day.isCurrentMonth) return isDark ? '#4b5563' : '#d1d5db';
-    if (day.checked && day.hasNote) return '#ffffff';
-    if (day.checked) return '#166534';
-    if (day.shielded) return '#7c3aed';
-    if (day.isToday) return '#2563eb';
-    return isDark ? '#e5e7eb' : '#374151';
+    if (!day.isCurrentMonth) return isDark ? '#5a5c5b' : '#acadac';
+    if (day.checked && day.hasNote) return '#003152';
+    if (day.checked) return '#ecf3ff';
+    if (day.shielded) return '#5b4b00';
+    if (day.isToday) return '#005f99';
+    return isDark ? '#e5e7eb' : '#2d2f2e';
   }
 
   getMiniCellColor(day: CalendarDay): string {
     if (!day.isCurrentMonth) return 'transparent';
-    if (day.shielded) return '#ede9fe';
-    if (day.checked && day.hasNote) return '#16a34a';
-    if (day.checked) return '#86efac';
+    if (day.shielded) return '#ffd709';
+    if (day.checked && day.hasNote) return '#63b4fd';
+    if (day.checked) return '#005f99';
     const isDark = Application.systemAppearance() === 'dark';
-    return isDark ? '#374151' : '#f3f4f6';
+    return isDark ? '#2c2c2e' : '#e1e3e1';
   }
 
   onSearchInput(text: string): void {

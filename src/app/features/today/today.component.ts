@@ -68,6 +68,7 @@ export class TodayComponent {
   starIcon = String.fromCharCode(0xe838);
   editIcon = String.fromCharCode(0xe254);
   copyIcon = String.fromCharCode(0xe14d);
+  prayerIcon = String.fromCharCode(0xea70);
 
   prayerTypeLabel = prayerTypeLabel;
 
