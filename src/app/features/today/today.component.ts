@@ -35,6 +35,7 @@ import {
   SHARE_CARD_TYPE_LABELS,
   MILESTONE_QUOTES,
 } from '../../core/models/share-card.model';
+import { BrutPressDirective } from '../../brut-press.directive';
 
 const MONTH_NAMES = [
   'January', 'February', 'March', 'April', 'May', 'June',
@@ -44,7 +45,7 @@ const MONTH_NAMES = [
 @Component({
   selector: 'ns-today',
   templateUrl: './today.component.html',
-  imports: [NativeScriptCommonModule],
+  imports: [NativeScriptCommonModule, BrutPressDirective],
   schemas: [NO_ERRORS_SCHEMA],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -228,6 +229,25 @@ export class TodayComponent {
     const remaining = next.days - this.checkinService.currentStreak();
     if (remaining <= 0) return `${next.title} \u2014 check in to unlock!`;
     return `${next.title} in ${remaining} ${remaining === 1 ? 'day' : 'days'}`;
+  });
+
+  milestoneProgressPercent = computed(() => {
+    const next = this.milestoneService.nextMilestone();
+    if (!next || next.days === 0) return 0;
+    return Math.min(this.checkinService.currentStreak() / next.days, 1);
+  });
+
+  milestoneProgressText = computed(() => {
+    const next = this.milestoneService.nextMilestone();
+    if (!next) return null;
+    const remaining = next.days - this.checkinService.currentStreak();
+    if (remaining <= 0) return null;
+    return `${remaining} ${remaining === 1 ? 'day' : 'days'} to ${next.days}`;
+  });
+
+  milestoneBarWidth = computed(() => {
+    const pct = this.milestoneProgressPercent() * 100;
+    return pct > 0 ? Math.max(pct, 5) + '%' : '0%';
   });
 
   celebrationDaysText = computed(() => {

@@ -3,6 +3,7 @@ import {
   Component,
   NO_ERRORS_SCHEMA,
   inject,
+  signal,
 } from '@angular/core';
 import { NativeScriptCommonModule } from '@nativescript/angular';
 import { Dialogs, isIOS } from '@nativescript/core';
@@ -16,11 +17,13 @@ import {
   prayerTypeLabel,
 } from '../../core/models/checkin.model';
 import { DevPanelComponent } from './dev-panel.component';
+import { BrutToggleComponent } from '../../brut-toggle.component';
+import { BrutPressDirective } from '../../brut-press.directive';
 
 @Component({
   selector: 'ns-settings',
   templateUrl: './settings.component.html',
-  imports: [NativeScriptCommonModule, DevPanelComponent],
+  imports: [NativeScriptCommonModule, DevPanelComponent, BrutToggleComponent, BrutPressDirective],
   schemas: [NO_ERRORS_SCHEMA],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -34,7 +37,7 @@ export class SettingsComponent {
   isIOS = isIOS;
   showDevPanel = typeof __DEV__ !== 'undefined' && __DEV__;
 
-  cancelIcon = String.fromCharCode(0xe5c9);
+  cancelIcon = String.fromCharCode(0xe5cd);
   addIcon = String.fromCharCode(0xe145);
   shieldIcon = String.fromCharCode(0xe8e8);
   starIcon = String.fromCharCode(0xe838);
@@ -43,15 +46,15 @@ export class SettingsComponent {
   bellIcon = String.fromCharCode(0xe7f4);
   listIcon = String.fromCharCode(0xe8ef);
 
-  private updatingReminder = false;
+  updatingReminder = signal(false);
   private timeChangeTimeout: ReturnType<typeof setTimeout> | undefined;
 
-  async onReminderToggle(args: any): Promise<void> {
-    if (this.updatingReminder) return;
-    this.updatingReminder = true;
+  async onReminderToggle(enabled: boolean): Promise<void> {
+    if (this.updatingReminder()) return;
+    this.updatingReminder.set(true);
 
     try {
-      const wantEnabled = args.value;
+      const wantEnabled = enabled;
       const success = await this.reminderService.toggle(wantEnabled);
 
       if (!success && wantEnabled) {
@@ -63,7 +66,7 @@ export class SettingsComponent {
         });
       }
     } finally {
-      this.updatingReminder = false;
+      this.updatingReminder.set(false);
     }
   }
 
@@ -80,12 +83,12 @@ export class SettingsComponent {
     });
   }
 
-  onShieldToggle(args: any): void {
-    this.checkinService.setShieldsEnabled(args.value);
+  onShieldToggle(enabled: boolean): void {
+    this.checkinService.setShieldsEnabled(enabled);
   }
 
-  onSlotsToggle(args: any): void {
-    this.checkinService.setSlotsEnabled(args.value);
+  onSlotsToggle(enabled: boolean): void {
+    this.checkinService.setSlotsEnabled(enabled);
   }
 
   onStreakRequirementChange(req: SlotStreakRequirement): void {

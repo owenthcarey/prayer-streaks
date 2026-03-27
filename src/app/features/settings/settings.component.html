@@ -5,10 +5,10 @@
 
     <!-- ==================== PRAYER TYPES ==================== -->
     <Label text="PRAYER TYPES"
-      class="font-bold text-brut-ink-light dark:text-[#9ca3af] mb-3"
+      class="font-bold text-brut-ink-light dark:text-[#9ca3af] section-heading"
       style="font-size: 11; letter-spacing: 0.15; text-transform: uppercase"
     ></Label>
-    <WrapLayout class="mb-5">
+    <WrapLayout class="screen-section">
       @for (type of checkinService.prayerTypes(); track type) {
         <StackLayout orientation="horizontal"
           class="bg-brut-card dark:bg-[#1c1c1e] border-3 border-brut-ink dark:border-[#5a5c5b] rounded-xl neo-shadow-sm px-4 py-2 mr-3 mb-3"
@@ -18,40 +18,41 @@
             style="font-size: 13" verticalAlignment="center"
           ></Label>
           <Image
-            *ngIf="isIOS" src="sys://xmark.circle.fill" tintColor="#b31b25"
-            width="18" height="18" class="ml-2" verticalAlignment="center"
+            *ngIf="isIOS" src="sys://xmark" tintColor="#2d2f2e"
+            width="14" height="14" class="ml-3" verticalAlignment="center"
             (tap)="checkinService.removePrayerType(type)"
           ></Image>
           <Label
             *ngIf="!isIOS" [text]="cancelIcon"
-            class="material-icon text-brut-error ml-2"
-            style="font-size: 18" verticalAlignment="center"
+            class="material-icon text-brut-ink dark:text-[#e5e7eb] ml-2"
+            style="font-size: 16" verticalAlignment="center"
             (tap)="checkinService.removePrayerType(type)"
           ></Label>
         </StackLayout>
       }
       <StackLayout orientation="horizontal"
-        class="border-3 border-dashed border-brut-muted dark:border-[#5a5c5b] rounded-xl px-4 py-2 mr-3 mb-3"
+        class="bg-brut-card dark:bg-[#1c1c1e] border-3 border-brut-muted dark:border-[#5a5c5b] rounded-xl px-4 py-2 mr-3 mb-3"
+        brutPress
         (tap)="addCustomType()"
       >
         <Image
-          *ngIf="isIOS" src="sys://plus.circle.fill" tintColor="#005f99"
-          width="18" height="18" verticalAlignment="center" class="mr-2"
+          *ngIf="isIOS" src="sys://plus" tintColor="#5a5c5b"
+          width="15" height="15" verticalAlignment="center" class="mr-3"
         ></Image>
         <Label
           *ngIf="!isIOS" [text]="addIcon"
-          class="material-icon text-brut-primary mr-2"
-          style="font-size: 18" verticalAlignment="center"
+          class="material-icon text-brut-ink dark:text-[#e5e7eb] mr-3"
+          style="font-size: 16" verticalAlignment="center"
         ></Label>
         <Label text="Add custom..."
-          class="font-bold text-brut-primary dark:text-brut-primary-light"
+          class="font-bold text-brut-ink dark:text-[#e5e7eb]"
           style="font-size: 13" verticalAlignment="center"
         ></Label>
       </StackLayout>
     </WrapLayout>
 
     <!-- ==================== REMINDERS ==================== -->
-    <StackLayout class="bg-brut-card dark:bg-[#1c1c1e] border-3 border-brut-ink dark:border-[#5a5c5b] rounded-xl neo-shadow p-5 mb-5">
+    <StackLayout class="bg-brut-card dark:bg-[#1c1c1e] border-3 border-brut-ink dark:border-[#5a5c5b] rounded-xl neo-shadow p-5 screen-section">
       <GridLayout columns="auto, *, auto">
         <Image
           *ngIf="isIOS" col="0" src="sys://bell.badge.fill" tintColor="#005f99"
@@ -67,14 +68,17 @@
           style="font-size: 16; letter-spacing: 0.05; text-transform: uppercase"
           verticalAlignment="center"
         ></Label>
-        <Switch col="2"
-          [checked]="reminderService.enabled()"
-          (checkedChange)="onReminderToggle($event)"
-        ></Switch>
+        <GridLayout col="2" horizontalAlignment="right" verticalAlignment="center">
+          <ns-brut-toggle
+            [checked]="reminderService.enabled()"
+            [disabled]="updatingReminder()"
+            (checkedChange)="onReminderToggle($event)"
+          ></ns-brut-toggle>
+        </GridLayout>
       </GridLayout>
       @if (reminderService.enabled()) {
         <GridLayout columns="*, auto"
-          class="bg-brut-container dark:bg-[#2c2c2e] p-3 rounded-lg border-2 border-brut-ink dark:border-[#5a5c5b] mt-4"
+          class="bg-brut-container dark:bg-[#2c2c2e] p-3 rounded-lg border-2 border-brut-ink dark:border-[#5a5c5b] card-block-gap"
         >
           <Label col="0" text="Notification Time"
             class="text-brut-ink dark:text-[#e5e7eb] font-bold" style="font-size: 14"
@@ -85,12 +89,12 @@
             style="font-size: 18" verticalAlignment="center"
           ></Label>
         </GridLayout>
-        <TimePicker (loaded)="onTimePickerLoaded($event)" class="mt-2"></TimePicker>
+        <TimePicker (loaded)="onTimePickerLoaded($event)" class="card-copy-gap"></TimePicker>
       }
     </StackLayout>
 
     <!-- ==================== PRAYER SLOTS ==================== -->
-    <StackLayout class="bg-brut-card dark:bg-[#1c1c1e] border-3 border-brut-ink dark:border-[#5a5c5b] rounded-xl neo-shadow p-5 mb-5">
+    <StackLayout class="bg-brut-card dark:bg-[#1c1c1e] border-3 border-brut-ink dark:border-[#5a5c5b] rounded-xl neo-shadow p-5 screen-section">
       <GridLayout columns="auto, *, auto">
         <Image
           *ngIf="isIOS" col="0" src="sys://list.bullet.rectangle.fill" tintColor="#005f99"
@@ -106,42 +110,46 @@
           style="font-size: 16; letter-spacing: 0.05; text-transform: uppercase"
           verticalAlignment="center"
         ></Label>
-        <Switch col="2"
-          [checked]="checkinService.slotsEnabled()"
-          (checkedChange)="onSlotsToggle($event)"
-        ></Switch>
+        <GridLayout col="2" horizontalAlignment="right" verticalAlignment="center">
+          <ns-brut-toggle
+            [checked]="checkinService.slotsEnabled()"
+            (checkedChange)="onSlotsToggle($event)"
+          ></ns-brut-toggle>
+        </GridLayout>
       </GridLayout>
       <Label text="Track multiple prayer times each day — morning, midday, evening, or custom."
-        class="text-sm text-brut-ink-light dark:text-[#9ca3af] mt-2" textWrap="true"
+        class="text-brut-ink-light dark:text-[#9ca3af] card-copy-gap" textWrap="true"
+        style="font-size: 14; line-height: 6"
       ></Label>
       @if (checkinService.slotsEnabled()) {
-        <StackLayout class="mt-4"
+        <StackLayout class="card-block-gap"
           style="border-top-width: 2; border-top-color: #e7e8e6"
         >
           @for (slot of checkinService.prayerSlots(); track slot.id) {
             <GridLayout columns="*, auto"
-              class="bg-brut-card dark:bg-[#1c1c1e] border-3 border-brut-ink dark:border-[#5a5c5b] rounded-xl p-4 mt-3"
+              class="bg-brut-card dark:bg-[#1c1c1e] border-3 border-brut-ink dark:border-[#5a5c5b] rounded-xl p-4 card-item-gap"
             >
               <Label col="0" [text]="slot.name"
                 class="font-bold text-brut-ink dark:text-[#e5e7eb]" style="font-size: 14"
                 verticalAlignment="center"
               ></Label>
               <Image
-                *ngIf="isIOS" col="1" src="sys://xmark.circle.fill" tintColor="#b31b25"
-                width="20" height="20" verticalAlignment="center"
+                *ngIf="isIOS" col="1" src="sys://xmark" tintColor="#2d2f2e"
+                width="16" height="16" verticalAlignment="center"
                 (tap)="checkinService.removeSlot(slot.id)"
               ></Image>
               <Label
                 *ngIf="!isIOS" col="1" [text]="cancelIcon"
-                class="material-icon text-brut-error" style="font-size: 20"
+                class="material-icon text-brut-ink dark:text-[#e5e7eb]" style="font-size: 20"
                 verticalAlignment="center"
                 (tap)="checkinService.removeSlot(slot.id)"
               ></Label>
             </GridLayout>
           }
           <StackLayout orientation="horizontal"
-            class="border-3 border-dashed border-brut-ink dark:border-[#5a5c5b] rounded-xl p-3 mt-3"
+            class="border-3 border-dashed border-brut-ink dark:border-[#5a5c5b] rounded-xl p-3 card-item-gap"
             horizontalAlignment="center"
+            brutPress
             (tap)="addSlot()"
           >
             <Image
@@ -161,11 +169,12 @@
 
           <!-- Streak requirement toggle -->
           <Label text="STREAK COMPLETION"
-            class="font-bold text-brut-muted dark:text-[#9ca3af] mt-4 mb-2"
+            class="font-bold text-brut-muted dark:text-[#9ca3af] card-subsection-label"
             style="font-size: 10; letter-spacing: 0.15; text-transform: uppercase"
           ></Label>
           <GridLayout columns="*, *">
             <Label col="0" text="Any slot"
+              brutPress
               [class]="
                 'text-center py-2 rounded-lg mr-1 font-bold border-2 ' +
                 (checkinService.slotStreakRequirement() === 'any'
@@ -176,6 +185,7 @@
               (tap)="onStreakRequirementChange('any')"
             ></Label>
             <Label col="1" text="All slots"
+              brutPress
               [class]="
                 'text-center py-2 rounded-lg ml-1 font-bold border-2 ' +
                 (checkinService.slotStreakRequirement() === 'all'
@@ -190,15 +200,15 @@
             [text]="checkinService.slotStreakRequirement() === 'any'
               ? 'Your streak counts if you complete at least one slot per day.'
               : 'Your streak counts only when you complete every slot each day.'"
-            class="text-xs text-brut-muted dark:text-[#9ca3af] mt-2" textWrap="true"
+            class="text-xs text-brut-muted dark:text-[#9ca3af] card-copy-gap" textWrap="true"
           ></Label>
         </StackLayout>
       }
     </StackLayout>
 
     <!-- ==================== STREAK SHIELDS ==================== -->
-    <StackLayout class="bg-brut-card dark:bg-[#1c1c1e] border-3 border-brut-gold-dark dark:border-brut-gold rounded-xl neo-shadow p-5 mb-5">
-      <GridLayout columns="auto, *, auto" class="mb-2">
+    <StackLayout class="shields-section border-3 border-brut-gold-dark dark:border-brut-gold rounded-xl neo-shadow p-5 screen-section">
+      <GridLayout columns="auto, *, auto" class="card-label-gap">
         <Image
           *ngIf="isIOS" col="0" src="sys://shield.fill" tintColor="#6c5a00"
           width="22" height="22" verticalAlignment="center" class="mr-3"
@@ -213,25 +223,28 @@
           style="font-size: 16; letter-spacing: 0.05; text-transform: uppercase"
           verticalAlignment="center"
         ></Label>
-        <Switch col="2"
-          [checked]="checkinService.shieldsEnabled()"
-          (checkedChange)="onShieldToggle($event)"
-        ></Switch>
+        <GridLayout col="2" horizontalAlignment="right" verticalAlignment="center">
+          <ns-brut-toggle
+            [checked]="checkinService.shieldsEnabled()"
+            (checkedChange)="onShieldToggle($event)"
+          ></ns-brut-toggle>
+        </GridLayout>
       </GridLayout>
       <Label text="Earn 1 shield every 7 days (max 3). Shields auto-protect your streak when you miss a day."
-        class="text-sm text-brut-ink-light dark:text-[#9ca3af]" textWrap="true"
+        class="text-brut-ink-light dark:text-[#9ca3af]" textWrap="true"
+        style="font-size: 14; line-height: 6"
       ></Label>
       @if (checkinService.shieldsEnabled()) {
         <StackLayout orientation="horizontal"
-          class="bg-brut-card dark:bg-[#1c1c1e] border-3 border-brut-ink dark:border-[#5a5c5b] rounded-xl p-4 mt-4"
+          class="bg-brut-card dark:bg-[#1c1c1e] border-3 border-brut-ink dark:border-[#5a5c5b] rounded-xl p-4 card-block-gap"
         >
           <Image
-            *ngIf="isIOS" src="sys://shield.fill" tintColor="#ffd709"
+            *ngIf="isIOS" src="sys://shield.fill" tintColor="#6c5a00"
             width="28" height="28" verticalAlignment="center" class="mr-3"
           ></Image>
           <Label
             *ngIf="!isIOS" [text]="shieldIcon"
-            class="material-icon text-brut-gold mr-3"
+            class="material-icon text-brut-gold-dark mr-3"
             style="font-size: 28" verticalAlignment="center"
           ></Label>
           <StackLayout verticalAlignment="center">
@@ -250,10 +263,10 @@
 
     <!-- ==================== MILESTONES ==================== -->
     <Label text="MILESTONES"
-      class="font-bold text-brut-ink-light dark:text-[#9ca3af] mb-3"
+      class="font-bold text-brut-ink-light dark:text-[#9ca3af] section-heading"
       style="font-size: 11; letter-spacing: 0.15; text-transform: uppercase"
     ></Label>
-    <StackLayout class="mb-5">
+    <StackLayout class="screen-section">
       @for (milestone of milestoneService.allMilestones(); track milestone.id) {
         <GridLayout columns="auto, *, auto"
           [class]="
@@ -325,6 +338,7 @@
     <!-- ==================== RESET ==================== -->
     <StackLayout
       class="bg-brut-error-bg border-3 border-brut-ink dark:border-[#5a5c5b] rounded-xl neo-shadow p-4 mt-2"
+      brutPress
       (tap)="resetAllData()"
     >
       <Label text="RESET ALL DATA"
