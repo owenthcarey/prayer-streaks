@@ -2,23 +2,23 @@
 
 <GridLayout rows="auto, auto, auto, *">
   <!-- Stats bar -->
-  <GridLayout row="0" columns="*, 12, *" class="px-4 pt-4 mb-3">
+  <GridLayout row="0" columns="*, 12, *" class="px-4 pt-4 screen-section-compact">
     <StackLayout col="0"
       class="bg-brut-card dark:bg-[#1c1c1e] border-3 border-brut-ink dark:border-[#5a5c5b] rounded-xl neo-shadow p-4"
     >
       <Label text="CURRENT STREAK"
         class="font-bold text-brut-muted dark:text-[#9ca3af]"
-        style="font-size: 9; letter-spacing: 0.1; text-transform: uppercase"
+        style="font-size: 10; letter-spacing: 0.12; text-transform: uppercase"
       ></Label>
-      <StackLayout orientation="horizontal" class="mt-1">
+      <StackLayout orientation="horizontal" class="card-title-gap-tight">
         <Label
           [text]="checkinService.currentStreak()"
           class="font-bold text-brut-primary"
-          style="font-size: 32; letter-spacing: -0.02"
+          style="font-size: 38; letter-spacing: -0.03"
         ></Label>
         <Label text="DAYS"
           class="font-bold text-brut-ink dark:text-[#e5e7eb] ml-1 mb-2"
-          style="font-size: 11; letter-spacing: 0.05"
+          style="font-size: 13; letter-spacing: 0.06"
           verticalAlignment="bottom"
         ></Label>
       </StackLayout>
@@ -28,17 +28,17 @@
     >
       <Label text="LONGEST STREAK"
         class="font-bold text-brut-muted dark:text-[#9ca3af]"
-        style="font-size: 9; letter-spacing: 0.1; text-transform: uppercase"
+        style="font-size: 10; letter-spacing: 0.12; text-transform: uppercase"
       ></Label>
-      <StackLayout orientation="horizontal" class="mt-1">
+      <StackLayout orientation="horizontal" class="card-title-gap-tight">
         <Label
           [text]="checkinService.longestStreak()"
           class="font-bold text-brut-gold-dark dark:text-brut-gold"
-          style="font-size: 32; letter-spacing: -0.02"
+          style="font-size: 38; letter-spacing: -0.03"
         ></Label>
         <Label text="DAYS"
           class="font-bold text-brut-ink dark:text-[#e5e7eb] ml-1 mb-2"
-          style="font-size: 11; letter-spacing: 0.05"
+          style="font-size: 13; letter-spacing: 0.06"
           verticalAlignment="bottom"
         ></Label>
       </StackLayout>
@@ -47,12 +47,13 @@
 
   <!-- View toggle -->
   <StackLayout row="1"
-    class="mx-4 mb-3 bg-brut-container dark:bg-[#2c2c2e] border-3 border-brut-ink dark:border-[#5a5c5b] rounded-full neo-shadow p-1"
+    class="mx-4 screen-section bg-brut-container dark:bg-[#2c2c2e] border-3 border-brut-ink dark:border-[#5a5c5b] rounded-xl neo-shadow p-1"
   >
     <GridLayout columns="*, *, *">
       <Label col="0" text="YEAR"
-        class="text-center py-2 rounded-full font-bold"
-        style="font-size: 13; letter-spacing: 0.1"
+        brutPress
+        class="text-center py-2 rounded-lg font-bold"
+        style="font-size: 14; letter-spacing: 0.12"
         [color]="viewMode() === 'year' ? '#ecf3ff' : '#5a5c5b'"
         [backgroundColor]="viewMode() === 'year' ? '#005f99' : 'transparent'"
         [borderWidth]="viewMode() === 'year' ? 2 : 0"
@@ -60,8 +61,9 @@
         (tap)="setViewMode('year')"
       ></Label>
       <Label col="1" text="CALENDAR"
-        class="text-center py-2 rounded-full font-bold"
-        style="font-size: 13; letter-spacing: 0.1"
+        brutPress
+        class="text-center py-2 rounded-lg font-bold"
+        style="font-size: 14; letter-spacing: 0.12"
         [color]="viewMode() === 'calendar' ? '#ecf3ff' : '#5a5c5b'"
         [backgroundColor]="viewMode() === 'calendar' ? '#005f99' : 'transparent'"
         [borderWidth]="viewMode() === 'calendar' ? 2 : 0"
@@ -69,8 +71,9 @@
         (tap)="setViewMode('calendar')"
       ></Label>
       <Label col="2" text="LIST"
-        class="text-center py-2 rounded-full font-bold"
-        style="font-size: 13; letter-spacing: 0.1"
+        brutPress
+        class="text-center py-2 rounded-lg font-bold"
+        style="font-size: 14; letter-spacing: 0.12"
         [color]="viewMode() === 'list' ? '#ecf3ff' : '#5a5c5b'"
         [backgroundColor]="viewMode() === 'list' ? '#005f99' : 'transparent'"
         [borderWidth]="viewMode() === 'list' ? 2 : 0"
@@ -84,7 +87,7 @@
   @if (viewMode() === 'list') {
     <StackLayout row="2">
       <GridLayout columns="auto, *, auto"
-        class="mx-4 mb-3 px-3 py-2 bg-brut-card dark:bg-[#1c1c1e] border-2 border-brut-ink dark:border-[#5a5c5b] rounded-xl"
+        class="mx-4 screen-section-compact card-control-row bg-brut-card dark:bg-[#1c1c1e] border-2 border-brut-ink dark:border-[#5a5c5b] rounded-xl"
       >
         <Image
           *ngIf="isIOS" col="0" src="sys://magnifyingglass" tintColor="#767776"
@@ -119,7 +122,7 @@
         }
       </GridLayout>
       <Label text="LAST 30 DAYS"
-        class="font-bold text-brut-ink dark:text-[#e5e7eb] ml-4 mb-2"
+        class="font-bold text-brut-ink dark:text-[#e5e7eb] ml-4 section-heading"
         style="font-size: 18; letter-spacing: -0.02"
       ></Label>
     </StackLayout>
@@ -137,7 +140,7 @@
           ></Label>
           <StackLayout *ngIf="!item.isMonthHeader" (tap)="item.note ? toggleExpand(item.date) : null">
             <GridLayout columns="auto, auto, *, auto, auto"
-              class="py-3 px-4"
+              class="card-row"
               style="border-bottom-width: 1; border-bottom-color: #e7e8e6"
             >
               <Image
@@ -178,7 +181,7 @@
                 ></Label>
               </StackLayout>
             </GridLayout>
-            <WrapLayout *ngIf="item.slots && item.slots.length > 0" class="px-4 pt-1 pb-2 ml-8">
+            <WrapLayout *ngIf="item.slots && item.slots.length > 0" class="card-detail-row ml-8">
               <Label *ngFor="let sl of item.slots"
                 [text]="sl.name"
                 [class]="
@@ -189,7 +192,7 @@
                 "
               ></Label>
             </WrapLayout>
-            <StackLayout *ngIf="item.isExpanded && item.note" class="px-4 pb-3 pt-1 ml-8">
+            <StackLayout *ngIf="item.isExpanded && item.note" class="card-detail-row ml-8">
               <Label [text]="item.note" textWrap="true"
                 class="text-sm text-brut-ink dark:text-[#e5e7eb] p-3 rounded-lg bg-brut-container-low dark:bg-[#2c2c2e] border-2 border-brut-ink dark:border-[#5a5c5b]"
                 style="line-height: 5"
@@ -203,8 +206,8 @@
 
   <!-- =============== CALENDAR VIEW =============== -->
   @else if (viewMode() === 'calendar') {
-    <GridLayout row="2" columns="auto, *, auto" class="mx-4 mb-2 px-2">
-      <StackLayout col="0" (tap)="previousMonth()"
+    <GridLayout row="2" columns="auto, *, auto" class="mx-4 screen-section-compact px-2">
+      <StackLayout col="0" brutPress (tap)="previousMonth()"
         class="border-3 border-brut-ink dark:border-[#5a5c5b] rounded-xl bg-brut-card dark:bg-[#1c1c1e] neo-shadow-sm"
         width="40" height="40" verticalAlignment="center"
       >
@@ -223,7 +226,7 @@
         style="font-size: 20; letter-spacing: -0.02; text-transform: uppercase"
         verticalAlignment="center"
       ></Label>
-      <StackLayout col="2" (tap)="nextMonth()"
+      <StackLayout col="2" brutPress (tap)="nextMonth()"
         class="border-3 border-brut-ink dark:border-[#5a5c5b] rounded-xl bg-brut-card dark:bg-[#1c1c1e] neo-shadow-sm"
         width="40" height="40" verticalAlignment="center"
       >
@@ -240,10 +243,10 @@
     </GridLayout>
 
     <ScrollView row="3">
-      <StackLayout class="mx-4" (swipe)="onCalendarSwipe($event)">
+      <StackLayout class="mx-4 pb-6" (swipe)="onCalendarSwipe($event)">
         <GridLayout columns="*, *, *, *, *, *, *"
           [rows]="calendarRowDefs()"
-          class="bg-brut-card dark:bg-[#1c1c1e] border-3 border-brut-ink dark:border-[#5a5c5b] rounded-xl neo-shadow p-3"
+          class="bg-brut-card dark:bg-[#1c1c1e] border-3 border-brut-ink dark:border-[#5a5c5b] rounded-xl neo-shadow p-3 screen-section-compact"
         >
           <Label row="0" col="0" text="SUN" class="text-center font-bold text-brut-muted" style="font-size: 9; letter-spacing: 0.05" verticalAlignment="center"></Label>
           <Label row="0" col="1" text="MON" class="text-center font-bold text-brut-muted" style="font-size: 9; letter-spacing: 0.05" verticalAlignment="center"></Label>
@@ -268,7 +271,7 @@
         </GridLayout>
 
         <!-- Legend -->
-        <StackLayout orientation="horizontal" class="mt-3 mb-4 px-2" horizontalAlignment="center">
+        <StackLayout orientation="horizontal" class="px-2" horizontalAlignment="center">
           <StackLayout orientation="horizontal" class="mr-4">
             <StackLayout width="12" height="12" borderRadius="3" backgroundColor="#005f99" borderWidth="1" borderColor="#2d2f2e" verticalAlignment="center"></StackLayout>
             <Label text="PRAYED" class="font-bold text-brut-muted ml-1" style="font-size: 9; letter-spacing: 0.05" verticalAlignment="center"></Label>
@@ -288,8 +291,8 @@
 
   <!-- =============== YEAR VIEW =============== -->
   @else {
-    <GridLayout row="2" columns="auto, *, auto" class="mx-4 mb-2 px-2">
-      <StackLayout col="0" (tap)="previousYear()"
+    <GridLayout row="2" columns="auto, *, auto" class="mx-4 screen-section-compact px-2">
+      <StackLayout col="0" brutPress (tap)="previousYear()"
         class="border-3 border-brut-ink dark:border-[#5a5c5b] rounded-xl bg-brut-card dark:bg-[#1c1c1e] neo-shadow-sm"
         width="40" height="40" verticalAlignment="center"
       >
@@ -308,7 +311,7 @@
         style="font-size: 20; letter-spacing: -0.02"
         verticalAlignment="center"
       ></Label>
-      <StackLayout col="2" (tap)="nextYear()"
+      <StackLayout col="2" brutPress (tap)="nextYear()"
         class="border-3 border-brut-ink dark:border-[#5a5c5b] rounded-xl bg-brut-card dark:bg-[#1c1c1e] neo-shadow-sm"
         width="40" height="40" verticalAlignment="center"
       >
@@ -325,9 +328,9 @@
     </GridLayout>
 
     <ScrollView row="3" (swipe)="onYearSwipe($event)">
-      <StackLayout class="mx-4 mb-4">
+      <StackLayout class="mx-4 pb-6">
         <GridLayout columns="*, *, *" rows="auto, auto, auto, auto"
-          class="bg-brut-card dark:bg-[#1c1c1e] border-3 border-brut-ink dark:border-[#5a5c5b] rounded-xl neo-shadow p-3"
+          class="bg-brut-card dark:bg-[#1c1c1e] border-3 border-brut-ink dark:border-[#5a5c5b] rounded-xl neo-shadow p-3 screen-section-compact"
         >
           <GridLayout *ngFor="let mm of yearMonths()"
             [row]="mm.gridRow" [col]="mm.gridCol"
@@ -360,7 +363,7 @@
         </GridLayout>
 
         <!-- Legend -->
-        <StackLayout orientation="horizontal" class="mt-3 px-2" horizontalAlignment="center">
+        <StackLayout orientation="horizontal" class="px-2" horizontalAlignment="center">
           <StackLayout orientation="horizontal" class="mr-4">
             <StackLayout width="10" height="10" borderRadius="2" backgroundColor="#005f99" verticalAlignment="center"></StackLayout>
             <Label text="PRAYED" class="font-bold text-brut-muted ml-1" style="font-size: 9; letter-spacing: 0.05" verticalAlignment="center"></Label>

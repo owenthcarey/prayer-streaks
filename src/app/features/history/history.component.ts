@@ -11,6 +11,7 @@ import { Application, isIOS } from '@nativescript/core';
 import { CheckInService } from '../../core/services/checkin.service';
 import { ShareService } from '../../core/services/share.service';
 import { CheckIn, prayerTypeLabel } from '../../core/models/checkin.model';
+import { BrutPressDirective } from '../../brut-press.directive';
 import {
   formatDateISO,
   formatDisplayDate,
@@ -66,7 +67,7 @@ export interface MiniMonth {
 @Component({
   selector: 'ns-history',
   templateUrl: './history.component.html',
-  imports: [NativeScriptCommonModule],
+  imports: [NativeScriptCommonModule, BrutPressDirective],
   schemas: [NO_ERRORS_SCHEMA],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
