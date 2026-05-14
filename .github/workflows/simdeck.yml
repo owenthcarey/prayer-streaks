@@ -1,0 +1,123 @@
+name: SimDeck
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  issue_comment:
+    types: [created]
+
+permissions:
+  actions: read
+  contents: read
+  issues: write
+  pull-requests: write
+
+jobs:
+  # Build iOS simulator .app on every push to main and every PR commit.
+  # The artifact is uploaded with name `ios-simulator-app-<commit-sha>` so
+  # the simdeck-ios job can find it when someone comments on a PR.
+  build-ios:
+    if: github.event_name != 'issue_comment'
+    runs-on: macos-26
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Select Xcode
+        run: sudo xcode-select -s /Applications/Xcode.app/Contents/Developer
+
+      - name: Install NativeScript CLI
+        run: npm install -g @nativescript/cli
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build iOS simulator app
+        run: ns build ios --no-hmr
+
+      - name: Upload simulator app for SimDeck
+        uses: NativeScript/SimDeck/actions/upload-ios-simulator-app@main
+        with:
+          app-glob: platforms/ios/build/**/*-iphonesimulator/*.app
+
+  build-android:
+    if: github.event_name != 'issue_comment'
+    runs-on: macos-26
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: Install NativeScript CLI
+        run: npm install -g @nativescript/cli
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build Android APK
+        run: ns build android --no-hmr
+
+      - name: Upload APK for SimDeck
+        uses: NativeScript/SimDeck/actions/upload-android-apk@main
+        with:
+          apk-glob: platforms/android/app/build/outputs/apk/**/*.apk
+
+  # Triggered when someone comments `simdeck run ios` on a PR.
+  # `build_workflow` points back at this same file so the action knows where
+  # the build-ios job's artifact came from.
+  simdeck-ios:
+    if: >
+      github.event_name == 'issue_comment' &&
+      github.event.issue.pull_request &&
+      startsWith(github.event.comment.body, 'simdeck run ios')
+    runs-on: macos-26
+    timeout-minutes: 35
+    concurrency:
+      group: simdeck-ios-pr-${{ github.event.issue.number }}
+      cancel-in-progress: true
+    steps:
+      - name: Run PR app in SimDeck
+        uses: NativeScript/SimDeck/actions/run-ios-comment-session@main
+        with:
+          pr_number: ${{ github.event.issue.number }}
+          command: ${{ github.event.comment.body }}
+          command_comment_id: ${{ github.event.comment.id }}
+          command_comment_author: ${{ github.event.comment.user.login }}
+          build_workflow: simdeck.yml
+          bundle_id: com.prayerstreaks.app
+
+  simdeck-android:
+    if: >
+      github.event_name == 'issue_comment' &&
+      github.event.issue.pull_request &&
+      startsWith(github.event.comment.body, 'simdeck run android')
+    runs-on: macos-26
+    timeout-minutes: 35
+    concurrency:
+      group: simdeck-android-pr-${{ github.event.issue.number }}
+      cancel-in-progress: true
+    steps:
+      - name: Run PR Android app in SimDeck
+        uses: NativeScript/SimDeck/actions/run-android-comment-session@main
+        with:
+          pr_number: ${{ github.event.issue.number }}
+          command: ${{ github.event.comment.body }}
+          command_comment_id: ${{ github.event.comment.id }}
+          command_comment_author: ${{ github.event.comment.user.login }}
+          build_workflow: simdeck.yml
+          package_name: com.prayerstreaks.app
